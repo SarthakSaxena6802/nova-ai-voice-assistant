@@ -1,0 +1,2088 @@
+{
+ "name": "Nova intent dataset",
+ "version": "1.0",
+ "description": "Hand-written utterances for Nova's intent classifier. Add new {text, intent} objects to extend it.",
+ "intents": [
+  "GREETING",
+  "GET_TIME",
+  "GET_DATE",
+  "CALCULATE",
+  "SET_TIMER",
+  "CREATE_REMINDER",
+  "FOCUS_MODE",
+  "WEATHER_QUERY",
+  "OPEN_WEBSITE",
+  "ASK_QUESTION",
+  "UNKNOWN"
+ ],
+ "examples": [
+  {
+   "text": "hello nova",
+   "intent": "GREETING"
+  },
+  {
+   "text": "hi",
+   "intent": "GREETING"
+  },
+  {
+   "text": "hello",
+   "intent": "GREETING"
+  },
+  {
+   "text": "hey there",
+   "intent": "GREETING"
+  },
+  {
+   "text": "good morning",
+   "intent": "GREETING"
+  },
+  {
+   "text": "good afternoon",
+   "intent": "GREETING"
+  },
+  {
+   "text": "good evening",
+   "intent": "GREETING"
+  },
+  {
+   "text": "how are you",
+   "intent": "GREETING"
+  },
+  {
+   "text": "how are you doing today",
+   "intent": "GREETING"
+  },
+  {
+   "text": "hey nova how is it going",
+   "intent": "GREETING"
+  },
+  {
+   "text": "hi there nova",
+   "intent": "GREETING"
+  },
+  {
+   "text": "what's up",
+   "intent": "GREETING"
+  },
+  {
+   "text": "yo",
+   "intent": "GREETING"
+  },
+  {
+   "text": "howdy",
+   "intent": "GREETING"
+  },
+  {
+   "text": "greetings",
+   "intent": "GREETING"
+  },
+  {
+   "text": "nice to meet you",
+   "intent": "GREETING"
+  },
+  {
+   "text": "hey",
+   "intent": "GREETING"
+  },
+  {
+   "text": "hiya",
+   "intent": "GREETING"
+  },
+  {
+   "text": "good morning nova",
+   "intent": "GREETING"
+  },
+  {
+   "text": "hello there",
+   "intent": "GREETING"
+  },
+  {
+   "text": "hey buddy",
+   "intent": "GREETING"
+  },
+  {
+   "text": "how have you been",
+   "intent": "GREETING"
+  },
+  {
+   "text": "are you there nova",
+   "intent": "GREETING"
+  },
+  {
+   "text": "hi nova how are you",
+   "intent": "GREETING"
+  },
+  {
+   "text": "morning",
+   "intent": "GREETING"
+  },
+  {
+   "text": "evening nova",
+   "intent": "GREETING"
+  },
+  {
+   "text": "hey nova",
+   "intent": "GREETING"
+  },
+  {
+   "text": "hello how are you",
+   "intent": "GREETING"
+  },
+  {
+   "text": "how's your day going",
+   "intent": "GREETING"
+  },
+  {
+   "text": "what's going on",
+   "intent": "GREETING"
+  },
+  {
+   "text": "hey how's it going",
+   "intent": "GREETING"
+  },
+  {
+   "text": "nice to see you again",
+   "intent": "GREETING"
+  },
+  {
+   "text": "hello again",
+   "intent": "GREETING"
+  },
+  {
+   "text": "hi again",
+   "intent": "GREETING"
+  },
+  {
+   "text": "helo",
+   "intent": "GREETING"
+  },
+  {
+   "text": "hellow nova",
+   "intent": "GREETING"
+  },
+  {
+   "text": "hai",
+   "intent": "GREETING"
+  },
+  {
+   "text": "good day to you",
+   "intent": "GREETING"
+  },
+  {
+   "text": "hey nova are you awake",
+   "intent": "GREETING"
+  },
+  {
+   "text": "hi nova, good to see you",
+   "intent": "GREETING"
+  },
+  {
+   "text": "sup",
+   "intent": "GREETING"
+  },
+  {
+   "text": "how do you do",
+   "intent": "GREETING"
+  },
+  {
+   "text": "hey friend",
+   "intent": "GREETING"
+  },
+  {
+   "text": "hello assistant",
+   "intent": "GREETING"
+  },
+  {
+   "text": "hey, what's new",
+   "intent": "GREETING"
+  },
+  {
+   "text": "good night nova",
+   "intent": "GREETING"
+  },
+  {
+   "text": "what time is it",
+   "intent": "GET_TIME"
+  },
+  {
+   "text": "tell me the current time",
+   "intent": "GET_TIME"
+  },
+  {
+   "text": "can you check the time",
+   "intent": "GET_TIME"
+  },
+  {
+   "text": "what's the time right now",
+   "intent": "GET_TIME"
+  },
+  {
+   "text": "time please",
+   "intent": "GET_TIME"
+  },
+  {
+   "text": "current time",
+   "intent": "GET_TIME"
+  },
+  {
+   "text": "what is the time",
+   "intent": "GET_TIME"
+  },
+  {
+   "text": "do you know what time it is",
+   "intent": "GET_TIME"
+  },
+  {
+   "text": "could you tell me the time",
+   "intent": "GET_TIME"
+  },
+  {
+   "text": "what time is it now",
+   "intent": "GET_TIME"
+  },
+  {
+   "text": "tell me the time",
+   "intent": "GET_TIME"
+  },
+  {
+   "text": "check the time",
+   "intent": "GET_TIME"
+  },
+  {
+   "text": "what's the time",
+   "intent": "GET_TIME"
+  },
+  {
+   "text": "time",
+   "intent": "GET_TIME"
+  },
+  {
+   "text": "how late is it",
+   "intent": "GET_TIME"
+  },
+  {
+   "text": "give me the time",
+   "intent": "GET_TIME"
+  },
+  {
+   "text": "what's the current time",
+   "intent": "GET_TIME"
+  },
+  {
+   "text": "is it late",
+   "intent": "GET_TIME"
+  },
+  {
+   "text": "what hour is it",
+   "intent": "GET_TIME"
+  },
+  {
+   "text": "please tell me what time it is",
+   "intent": "GET_TIME"
+  },
+  {
+   "text": "nova what time is it",
+   "intent": "GET_TIME"
+  },
+  {
+   "text": "can you tell me the time please",
+   "intent": "GET_TIME"
+  },
+  {
+   "text": "i need to know the time",
+   "intent": "GET_TIME"
+  },
+  {
+   "text": "what time do we have",
+   "intent": "GET_TIME"
+  },
+  {
+   "text": "what time is it right now",
+   "intent": "GET_TIME"
+  },
+  {
+   "text": "do you have the time",
+   "intent": "GET_TIME"
+  },
+  {
+   "text": "whats the time now",
+   "intent": "GET_TIME"
+  },
+  {
+   "text": "what time is it in here",
+   "intent": "GET_TIME"
+  },
+  {
+   "text": "show me the clock",
+   "intent": "GET_TIME"
+  },
+  {
+   "text": "what does the clock say",
+   "intent": "GET_TIME"
+  },
+  {
+   "text": "wat time is it",
+   "intent": "GET_TIME"
+  },
+  {
+   "text": "what tim is it",
+   "intent": "GET_TIME"
+  },
+  {
+   "text": "tell me the exact time",
+   "intent": "GET_TIME"
+  },
+  {
+   "text": "time check",
+   "intent": "GET_TIME"
+  },
+  {
+   "text": "what's the local time",
+   "intent": "GET_TIME"
+  },
+  {
+   "text": "how much is the time",
+   "intent": "GET_TIME"
+  },
+  {
+   "text": "what is the current time please",
+   "intent": "GET_TIME"
+  },
+  {
+   "text": "can i get the time",
+   "intent": "GET_TIME"
+  },
+  {
+   "text": "tell me what time it is now",
+   "intent": "GET_TIME"
+  },
+  {
+   "text": "what o'clock is it",
+   "intent": "GET_TIME"
+  },
+  {
+   "text": "time now",
+   "intent": "GET_TIME"
+  },
+  {
+   "text": "say the time",
+   "intent": "GET_TIME"
+  },
+  {
+   "text": "what is today's date",
+   "intent": "GET_DATE"
+  },
+  {
+   "text": "tell me the date",
+   "intent": "GET_DATE"
+  },
+  {
+   "text": "what day is today",
+   "intent": "GET_DATE"
+  },
+  {
+   "text": "which date is it",
+   "intent": "GET_DATE"
+  },
+  {
+   "text": "what's the date today",
+   "intent": "GET_DATE"
+  },
+  {
+   "text": "what day is it",
+   "intent": "GET_DATE"
+  },
+  {
+   "text": "today's date",
+   "intent": "GET_DATE"
+  },
+  {
+   "text": "date please",
+   "intent": "GET_DATE"
+  },
+  {
+   "text": "what is the date",
+   "intent": "GET_DATE"
+  },
+  {
+   "text": "can you tell me the date",
+   "intent": "GET_DATE"
+  },
+  {
+   "text": "what day of the week is it",
+   "intent": "GET_DATE"
+  },
+  {
+   "text": "which day is it today",
+   "intent": "GET_DATE"
+  },
+  {
+   "text": "what month is it",
+   "intent": "GET_DATE"
+  },
+  {
+   "text": "what year is it",
+   "intent": "GET_DATE"
+  },
+  {
+   "text": "tell me today's date",
+   "intent": "GET_DATE"
+  },
+  {
+   "text": "what's today",
+   "intent": "GET_DATE"
+  },
+  {
+   "text": "is today monday",
+   "intent": "GET_DATE"
+  },
+  {
+   "text": "what's the date",
+   "intent": "GET_DATE"
+  },
+  {
+   "text": "do you know the date",
+   "intent": "GET_DATE"
+  },
+  {
+   "text": "give me the date",
+   "intent": "GET_DATE"
+  },
+  {
+   "text": "what is the day today",
+   "intent": "GET_DATE"
+  },
+  {
+   "text": "which day of the week is today",
+   "intent": "GET_DATE"
+  },
+  {
+   "text": "date",
+   "intent": "GET_DATE"
+  },
+  {
+   "text": "current date",
+   "intent": "GET_DATE"
+  },
+  {
+   "text": "what date is it today",
+   "intent": "GET_DATE"
+  },
+  {
+   "text": "show me today's date",
+   "intent": "GET_DATE"
+  },
+  {
+   "text": "tell me what day it is",
+   "intent": "GET_DATE"
+  },
+  {
+   "text": "what is the date tomorrow",
+   "intent": "GET_DATE"
+  },
+  {
+   "text": "what day will it be tomorrow",
+   "intent": "GET_DATE"
+  },
+  {
+   "text": "what's the day today",
+   "intent": "GET_DATE"
+  },
+  {
+   "text": "which month are we in",
+   "intent": "GET_DATE"
+  },
+  {
+   "text": "what's today's day",
+   "intent": "GET_DATE"
+  },
+  {
+   "text": "whats the date",
+   "intent": "GET_DATE"
+  },
+  {
+   "text": "wat day is it",
+   "intent": "GET_DATE"
+  },
+  {
+   "text": "tell me the day and date",
+   "intent": "GET_DATE"
+  },
+  {
+   "text": "what day is it today nova",
+   "intent": "GET_DATE"
+  },
+  {
+   "text": "is it the weekend",
+   "intent": "GET_DATE"
+  },
+  {
+   "text": "remind me what day it is",
+   "intent": "GET_DATE"
+  },
+  {
+   "text": "date today",
+   "intent": "GET_DATE"
+  },
+  {
+   "text": "what is today",
+   "intent": "GET_DATE"
+  },
+  {
+   "text": "what's the full date",
+   "intent": "GET_DATE"
+  },
+  {
+   "text": "calculate 45 multiplied by 8",
+   "intent": "CALCULATE"
+  },
+  {
+   "text": "what is 150 divided by 5",
+   "intent": "CALCULATE"
+  },
+  {
+   "text": "add 25 and 37",
+   "intent": "CALCULATE"
+  },
+  {
+   "text": "calculate the square of 81",
+   "intent": "CALCULATE"
+  },
+  {
+   "text": "what is 12 times 12",
+   "intent": "CALCULATE"
+  },
+  {
+   "text": "how much is 7 plus 9",
+   "intent": "CALCULATE"
+  },
+  {
+   "text": "what's 100 minus 37",
+   "intent": "CALCULATE"
+  },
+  {
+   "text": "calculate 2 to the power of 10",
+   "intent": "CALCULATE"
+  },
+  {
+   "text": "what is the square root of 144",
+   "intent": "CALCULATE"
+  },
+  {
+   "text": "15 percent of 200",
+   "intent": "CALCULATE"
+  },
+  {
+   "text": "multiply 6 by 7",
+   "intent": "CALCULATE"
+  },
+  {
+   "text": "divide 81 by 9",
+   "intent": "CALCULATE"
+  },
+  {
+   "text": "subtract 15 from 40",
+   "intent": "CALCULATE"
+  },
+  {
+   "text": "what is 3.5 times 4",
+   "intent": "CALCULATE"
+  },
+  {
+   "text": "solve 25 + 17",
+   "intent": "CALCULATE"
+  },
+  {
+   "text": "compute 18 * 3",
+   "intent": "CALCULATE"
+  },
+  {
+   "text": "what's 2 + 2",
+   "intent": "CALCULATE"
+  },
+  {
+   "text": "what is 9 squared",
+   "intent": "CALCULATE"
+  },
+  {
+   "text": "calculate 1000 divided by 8",
+   "intent": "CALCULATE"
+  },
+  {
+   "text": "sum of 45 and 55",
+   "intent": "CALCULATE"
+  },
+  {
+   "text": "what is 20 percent of 150",
+   "intent": "CALCULATE"
+  },
+  {
+   "text": "how much is 99 times 3",
+   "intent": "CALCULATE"
+  },
+  {
+   "text": "can you calculate 48 divided by 6",
+   "intent": "CALCULATE"
+  },
+  {
+   "text": "please multiply 13 and 14",
+   "intent": "CALCULATE"
+  },
+  {
+   "text": "what's the product of 8 and 9",
+   "intent": "CALCULATE"
+  },
+  {
+   "text": "what does 17 minus 8 equal",
+   "intent": "CALCULATE"
+  },
+  {
+   "text": "calculate 5 cubed",
+   "intent": "CALCULATE"
+  },
+  {
+   "text": "what is 7 into 8",
+   "intent": "CALCULATE"
+  },
+  {
+   "text": "find the square root of 625",
+   "intent": "CALCULATE"
+  },
+  {
+   "text": "add 1200 and 3400",
+   "intent": "CALCULATE"
+  },
+  {
+   "text": "what is 50 over 2",
+   "intent": "CALCULATE"
+  },
+  {
+   "text": "do the math 34 plus 66",
+   "intent": "CALCULATE"
+  },
+  {
+   "text": "calculate 3 raised to 4",
+   "intent": "CALCULATE"
+  },
+  {
+   "text": "what's 60 percent of 90",
+   "intent": "CALCULATE"
+  },
+  {
+   "text": "evaluate 10 + 20 * 3",
+   "intent": "CALCULATE"
+  },
+  {
+   "text": "how much is 1000 minus 1",
+   "intent": "CALCULATE"
+  },
+  {
+   "text": "what is 2.5 plus 3.75",
+   "intent": "CALCULATE"
+  },
+  {
+   "text": "calculator 14 times 6",
+   "intent": "CALCULATE"
+  },
+  {
+   "text": "math 9 times 9",
+   "intent": "CALCULATE"
+  },
+  {
+   "text": "what is 45 x 3",
+   "intent": "CALCULATE"
+  },
+  {
+   "text": "work out 120 divided by 4",
+   "intent": "CALCULATE"
+  },
+  {
+   "text": "what is the difference between 90 and 45",
+   "intent": "CALCULATE"
+  },
+  {
+   "text": "plus 5 and 6",
+   "intent": "CALCULATE"
+  },
+  {
+   "text": "calculate 8 multiply 7",
+   "intent": "CALCULATE"
+  },
+  {
+   "text": "what's 15 percent tip on 80",
+   "intent": "CALCULATE"
+  },
+  {
+   "text": "what is 64 to the power of half",
+   "intent": "CALCULATE"
+  },
+  {
+   "text": "calculate",
+   "intent": "CALCULATE"
+  },
+  {
+   "text": "calculator",
+   "intent": "CALCULATE"
+  },
+  {
+   "text": "do some math",
+   "intent": "CALCULATE"
+  },
+  {
+   "text": "i need to calculate something",
+   "intent": "CALCULATE"
+  },
+  {
+   "text": "help me with a calculation",
+   "intent": "CALCULATE"
+  },
+  {
+   "text": "can you do a calculation for me",
+   "intent": "CALCULATE"
+  },
+  {
+   "text": "set a timer for 10 minutes",
+   "intent": "SET_TIMER"
+  },
+  {
+   "text": "remind me in 30 seconds",
+   "intent": "SET_TIMER"
+  },
+  {
+   "text": "start a 5 minute countdown",
+   "intent": "SET_TIMER"
+  },
+  {
+   "text": "timer for 2 hours",
+   "intent": "SET_TIMER"
+  },
+  {
+   "text": "set timer 15 minutes",
+   "intent": "SET_TIMER"
+  },
+  {
+   "text": "start a timer for 1 hour",
+   "intent": "SET_TIMER"
+  },
+  {
+   "text": "countdown 20 seconds",
+   "intent": "SET_TIMER"
+  },
+  {
+   "text": "set a 3 minute timer",
+   "intent": "SET_TIMER"
+  },
+  {
+   "text": "can you set a timer for 45 minutes",
+   "intent": "SET_TIMER"
+  },
+  {
+   "text": "please start a timer for 90 seconds",
+   "intent": "SET_TIMER"
+  },
+  {
+   "text": "timer 10 minutes",
+   "intent": "SET_TIMER"
+  },
+  {
+   "text": "set an alarm for 25 minutes from now",
+   "intent": "SET_TIMER"
+  },
+  {
+   "text": "wake me up in 20 minutes",
+   "intent": "SET_TIMER"
+  },
+  {
+   "text": "start a countdown for 1 hour and 30 minutes",
+   "intent": "SET_TIMER"
+  },
+  {
+   "text": "i need a timer for 12 minutes",
+   "intent": "SET_TIMER"
+  },
+  {
+   "text": "set a timer for half an hour",
+   "intent": "SET_TIMER"
+  },
+  {
+   "text": "set a timer for an hour",
+   "intent": "SET_TIMER"
+  },
+  {
+   "text": "begin a 7 minute timer",
+   "intent": "SET_TIMER"
+  },
+  {
+   "text": "set a time for 10 minutes",
+   "intent": "SET_TIMER"
+  },
+  {
+   "text": "set the timer to 8 minutes",
+   "intent": "SET_TIMER"
+  },
+  {
+   "text": "start timer for pasta 11 minutes",
+   "intent": "SET_TIMER"
+  },
+  {
+   "text": "set a tea timer for 4 minutes",
+   "intent": "SET_TIMER"
+  },
+  {
+   "text": "time me for 30 minutes",
+   "intent": "SET_TIMER"
+  },
+  {
+   "text": "let me know when 5 minutes are up",
+   "intent": "SET_TIMER"
+  },
+  {
+   "text": "alert me in 15 minutes",
+   "intent": "SET_TIMER"
+  },
+  {
+   "text": "ping me in 10 minutes",
+   "intent": "SET_TIMER"
+  },
+  {
+   "text": "count down from 60 seconds",
+   "intent": "SET_TIMER"
+  },
+  {
+   "text": "start a stopwatch countdown of 2 minutes",
+   "intent": "SET_TIMER"
+  },
+  {
+   "text": "set a timer",
+   "intent": "SET_TIMER"
+  },
+  {
+   "text": "start a timer",
+   "intent": "SET_TIMER"
+  },
+  {
+   "text": "cancel my timer",
+   "intent": "SET_TIMER"
+  },
+  {
+   "text": "stop the timer",
+   "intent": "SET_TIMER"
+  },
+  {
+   "text": "cancel the timer",
+   "intent": "SET_TIMER"
+  },
+  {
+   "text": "how much time is left on my timer",
+   "intent": "SET_TIMER"
+  },
+  {
+   "text": "how long is left on the timer",
+   "intent": "SET_TIMER"
+  },
+  {
+   "text": "check my timer",
+   "intent": "SET_TIMER"
+  },
+  {
+   "text": "delete all timers",
+   "intent": "SET_TIMER"
+  },
+  {
+   "text": "turn off the timer",
+   "intent": "SET_TIMER"
+  },
+  {
+   "text": "show my timers",
+   "intent": "SET_TIMER"
+  },
+  {
+   "text": "timer status",
+   "intent": "SET_TIMER"
+  },
+  {
+   "text": "set a timmer for 5 minutes",
+   "intent": "SET_TIMER"
+  },
+  {
+   "text": "set a timer four 10 minutes",
+   "intent": "SET_TIMER"
+  },
+  {
+   "text": "start a countdown",
+   "intent": "SET_TIMER"
+  },
+  {
+   "text": "add a timer for 6 minutes",
+   "intent": "SET_TIMER"
+  },
+  {
+   "text": "put a timer on for 3 minutes",
+   "intent": "SET_TIMER"
+  },
+  {
+   "text": "notify me after 40 minutes",
+   "intent": "SET_TIMER"
+  },
+  {
+   "text": "make a 2 minute timer",
+   "intent": "SET_TIMER"
+  },
+  {
+   "text": "remind me to study at 8 pm",
+   "intent": "CREATE_REMINDER"
+  },
+  {
+   "text": "i need to remember to call my friend tomorrow",
+   "intent": "CREATE_REMINDER"
+  },
+  {
+   "text": "remind me about my meeting at 5",
+   "intent": "CREATE_REMINDER"
+  },
+  {
+   "text": "add a reminder to submit my assignment",
+   "intent": "CREATE_REMINDER"
+  },
+  {
+   "text": "set a reminder for tomorrow at 9 am to attend my meeting",
+   "intent": "CREATE_REMINDER"
+  },
+  {
+   "text": "remind me to take my medicine at 9",
+   "intent": "CREATE_REMINDER"
+  },
+  {
+   "text": "create a reminder to buy groceries",
+   "intent": "CREATE_REMINDER"
+  },
+  {
+   "text": "don't let me forget to pay rent on friday",
+   "intent": "CREATE_REMINDER"
+  },
+  {
+   "text": "remind me tomorrow morning to go jogging",
+   "intent": "CREATE_REMINDER"
+  },
+  {
+   "text": "please remind me to water the plants this evening",
+   "intent": "CREATE_REMINDER"
+  },
+  {
+   "text": "make a reminder to email my professor at 3 pm",
+   "intent": "CREATE_REMINDER"
+  },
+  {
+   "text": "remind me to drink water at 4",
+   "intent": "CREATE_REMINDER"
+  },
+  {
+   "text": "new reminder call dad tonight",
+   "intent": "CREATE_REMINDER"
+  },
+  {
+   "text": "set a reminder to pick up the laundry at 6 pm",
+   "intent": "CREATE_REMINDER"
+  },
+  {
+   "text": "remind me on monday to submit the report",
+   "intent": "CREATE_REMINDER"
+  },
+  {
+   "text": "can you remind me to check the oven at 7 30",
+   "intent": "CREATE_REMINDER"
+  },
+  {
+   "text": "i have to remember to book tickets tomorrow at noon",
+   "intent": "CREATE_REMINDER"
+  },
+  {
+   "text": "reminder to feed the cat at 8",
+   "intent": "CREATE_REMINDER"
+  },
+  {
+   "text": "remind me in 2 hours to stretch",
+   "intent": "CREATE_REMINDER"
+  },
+  {
+   "text": "remind me next friday about the exam",
+   "intent": "CREATE_REMINDER"
+  },
+  {
+   "text": "add reminder doctor appointment tomorrow at 10 am",
+   "intent": "CREATE_REMINDER"
+  },
+  {
+   "text": "remind me to study",
+   "intent": "CREATE_REMINDER"
+  },
+  {
+   "text": "remind me to call mom",
+   "intent": "CREATE_REMINDER"
+  },
+  {
+   "text": "set a reminder",
+   "intent": "CREATE_REMINDER"
+  },
+  {
+   "text": "create a reminder",
+   "intent": "CREATE_REMINDER"
+  },
+  {
+   "text": "show my reminders",
+   "intent": "CREATE_REMINDER"
+  },
+  {
+   "text": "what are my reminders",
+   "intent": "CREATE_REMINDER"
+  },
+  {
+   "text": "list my reminders",
+   "intent": "CREATE_REMINDER"
+  },
+  {
+   "text": "do i have any reminders",
+   "intent": "CREATE_REMINDER"
+  },
+  {
+   "text": "delete the reminder about groceries",
+   "intent": "CREATE_REMINDER"
+  },
+  {
+   "text": "remove my reminder",
+   "intent": "CREATE_REMINDER"
+  },
+  {
+   "text": "cancel the reminder",
+   "intent": "CREATE_REMINDER"
+  },
+  {
+   "text": "mark the reminder as done",
+   "intent": "CREATE_REMINDER"
+  },
+  {
+   "text": "i finished the assignment reminder",
+   "intent": "CREATE_REMINDER"
+  },
+  {
+   "text": "clear all my reminders",
+   "intent": "CREATE_REMINDER"
+  },
+  {
+   "text": "remind me to study at eight pm",
+   "intent": "CREATE_REMINDER"
+  },
+  {
+   "text": "remined me to call john at 6",
+   "intent": "CREATE_REMINDER"
+  },
+  {
+   "text": "remind me to by milk tomorrow",
+   "intent": "CREATE_REMINDER"
+  },
+  {
+   "text": "make sure i remember to lock the door at 10 pm",
+   "intent": "CREATE_REMINDER"
+  },
+  {
+   "text": "note to self buy a birthday gift tomorrow",
+   "intent": "CREATE_REMINDER"
+  },
+  {
+   "text": "schedule a reminder for my dentist on tuesday at 11",
+   "intent": "CREATE_REMINDER"
+  },
+  {
+   "text": "remember to submit the form at 5 pm",
+   "intent": "CREATE_REMINDER"
+  },
+  {
+   "text": "remind me tonight to charge my phone",
+   "intent": "CREATE_REMINDER"
+  },
+  {
+   "text": "set reminder pay electricity bill on the 25th",
+   "intent": "CREATE_REMINDER"
+  },
+  {
+   "text": "what reminders do i have today",
+   "intent": "CREATE_REMINDER"
+  },
+  {
+   "text": "set an alarm for 6 am",
+   "intent": "CREATE_REMINDER"
+  },
+  {
+   "text": "wake me up at 7 tomorrow",
+   "intent": "CREATE_REMINDER"
+  },
+  {
+   "text": "alarm at 9 30 pm",
+   "intent": "CREATE_REMINDER"
+  },
+  {
+   "text": "set an alarm for tomorrow at 8",
+   "intent": "CREATE_REMINDER"
+  },
+  {
+   "text": "create an alarm for 5 30 am",
+   "intent": "CREATE_REMINDER"
+  },
+  {
+   "text": "i need an alarm at 6 tomorrow morning",
+   "intent": "CREATE_REMINDER"
+  },
+  {
+   "text": "set my alarm for 7 15 am",
+   "intent": "CREATE_REMINDER"
+  },
+  {
+   "text": "enable focus mode",
+   "intent": "FOCUS_MODE"
+  },
+  {
+   "text": "i want to focus",
+   "intent": "FOCUS_MODE"
+  },
+  {
+   "text": "start productivity mode",
+   "intent": "FOCUS_MODE"
+  },
+  {
+   "text": "help me avoid distractions",
+   "intent": "FOCUS_MODE"
+  },
+  {
+   "text": "turn on focus mode",
+   "intent": "FOCUS_MODE"
+  },
+  {
+   "text": "start a focus session",
+   "intent": "FOCUS_MODE"
+  },
+  {
+   "text": "start a pomodoro",
+   "intent": "FOCUS_MODE"
+  },
+  {
+   "text": "begin deep work",
+   "intent": "FOCUS_MODE"
+  },
+  {
+   "text": "focus mode for 50 minutes",
+   "intent": "FOCUS_MODE"
+  },
+  {
+   "text": "start a 25 minute focus session",
+   "intent": "FOCUS_MODE"
+  },
+  {
+   "text": "i need to concentrate",
+   "intent": "FOCUS_MODE"
+  },
+  {
+   "text": "let's get some work done",
+   "intent": "FOCUS_MODE"
+  },
+  {
+   "text": "activate do not disturb",
+   "intent": "FOCUS_MODE"
+  },
+  {
+   "text": "start studying mode",
+   "intent": "FOCUS_MODE"
+  },
+  {
+   "text": "focus for one hour",
+   "intent": "FOCUS_MODE"
+  },
+  {
+   "text": "help me concentrate for 30 minutes",
+   "intent": "FOCUS_MODE"
+  },
+  {
+   "text": "i want to study without distractions",
+   "intent": "FOCUS_MODE"
+  },
+  {
+   "text": "enable productivity mode",
+   "intent": "FOCUS_MODE"
+  },
+  {
+   "text": "start a work session",
+   "intent": "FOCUS_MODE"
+  },
+  {
+   "text": "go into focus mode",
+   "intent": "FOCUS_MODE"
+  },
+  {
+   "text": "start pomodoro timer",
+   "intent": "FOCUS_MODE"
+  },
+  {
+   "text": "begin a study session",
+   "intent": "FOCUS_MODE"
+  },
+  {
+   "text": "stop focus mode",
+   "intent": "FOCUS_MODE"
+  },
+  {
+   "text": "end the focus session",
+   "intent": "FOCUS_MODE"
+  },
+  {
+   "text": "turn off focus mode",
+   "intent": "FOCUS_MODE"
+  },
+  {
+   "text": "disable focus mode",
+   "intent": "FOCUS_MODE"
+  },
+  {
+   "text": "how long is left in my focus session",
+   "intent": "FOCUS_MODE"
+  },
+  {
+   "text": "am i in focus mode",
+   "intent": "FOCUS_MODE"
+  },
+  {
+   "text": "focus session status",
+   "intent": "FOCUS_MODE"
+  },
+  {
+   "text": "pause focus mode",
+   "intent": "FOCUS_MODE"
+  },
+  {
+   "text": "i am done focusing",
+   "intent": "FOCUS_MODE"
+  },
+  {
+   "text": "exit productivity mode",
+   "intent": "FOCUS_MODE"
+  },
+  {
+   "text": "focus mode on",
+   "intent": "FOCUS_MODE"
+  },
+  {
+   "text": "start fokus mode",
+   "intent": "FOCUS_MODE"
+  },
+  {
+   "text": "start focus mod",
+   "intent": "FOCUS_MODE"
+  },
+  {
+   "text": "lock in for 45 minutes",
+   "intent": "FOCUS_MODE"
+  },
+  {
+   "text": "time to focus",
+   "intent": "FOCUS_MODE"
+  },
+  {
+   "text": "help me stay productive",
+   "intent": "FOCUS_MODE"
+  },
+  {
+   "text": "block distractions for an hour",
+   "intent": "FOCUS_MODE"
+  },
+  {
+   "text": "deep work mode on",
+   "intent": "FOCUS_MODE"
+  },
+  {
+   "text": "i want to be productive",
+   "intent": "FOCUS_MODE"
+  },
+  {
+   "text": "start a concentration session",
+   "intent": "FOCUS_MODE"
+  },
+  {
+   "text": "silence distractions while i study",
+   "intent": "FOCUS_MODE"
+  },
+  {
+   "text": "focus",
+   "intent": "FOCUS_MODE"
+  },
+  {
+   "text": "let me focus for 20 minutes",
+   "intent": "FOCUS_MODE"
+  },
+  {
+   "text": "what's the weather like",
+   "intent": "WEATHER_QUERY"
+  },
+  {
+   "text": "will it rain today",
+   "intent": "WEATHER_QUERY"
+  },
+  {
+   "text": "tell me the weather",
+   "intent": "WEATHER_QUERY"
+  },
+  {
+   "text": "how's the weather",
+   "intent": "WEATHER_QUERY"
+  },
+  {
+   "text": "what is the weather today",
+   "intent": "WEATHER_QUERY"
+  },
+  {
+   "text": "is it going to rain",
+   "intent": "WEATHER_QUERY"
+  },
+  {
+   "text": "what's the temperature outside",
+   "intent": "WEATHER_QUERY"
+  },
+  {
+   "text": "how hot is it today",
+   "intent": "WEATHER_QUERY"
+  },
+  {
+   "text": "how cold is it outside",
+   "intent": "WEATHER_QUERY"
+  },
+  {
+   "text": "do i need an umbrella",
+   "intent": "WEATHER_QUERY"
+  },
+  {
+   "text": "weather forecast",
+   "intent": "WEATHER_QUERY"
+  },
+  {
+   "text": "what is the forecast for tomorrow",
+   "intent": "WEATHER_QUERY"
+  },
+  {
+   "text": "weather in london",
+   "intent": "WEATHER_QUERY"
+  },
+  {
+   "text": "what's the weather in new york",
+   "intent": "WEATHER_QUERY"
+  },
+  {
+   "text": "is it sunny outside",
+   "intent": "WEATHER_QUERY"
+  },
+  {
+   "text": "will it snow tomorrow",
+   "intent": "WEATHER_QUERY"
+  },
+  {
+   "text": "how's the weather in mumbai",
+   "intent": "WEATHER_QUERY"
+  },
+  {
+   "text": "temperature",
+   "intent": "WEATHER_QUERY"
+  },
+  {
+   "text": "current weather",
+   "intent": "WEATHER_QUERY"
+  },
+  {
+   "text": "weather please",
+   "intent": "WEATHER_QUERY"
+  },
+  {
+   "text": "is it windy today",
+   "intent": "WEATHER_QUERY"
+  },
+  {
+   "text": "what's the humidity",
+   "intent": "WEATHER_QUERY"
+  },
+  {
+   "text": "should i wear a jacket today",
+   "intent": "WEATHER_QUERY"
+  },
+  {
+   "text": "tell me the forecast",
+   "intent": "WEATHER_QUERY"
+  },
+  {
+   "text": "weather report",
+   "intent": "WEATHER_QUERY"
+  },
+  {
+   "text": "what's it like outside",
+   "intent": "WEATHER_QUERY"
+  },
+  {
+   "text": "is it raining",
+   "intent": "WEATHER_QUERY"
+  },
+  {
+   "text": "will it be cloudy tomorrow",
+   "intent": "WEATHER_QUERY"
+  },
+  {
+   "text": "what's the temperature in delhi",
+   "intent": "WEATHER_QUERY"
+  },
+  {
+   "text": "weather update",
+   "intent": "WEATHER_QUERY"
+  },
+  {
+   "text": "check the weather",
+   "intent": "WEATHER_QUERY"
+  },
+  {
+   "text": "how is the weather in paris",
+   "intent": "WEATHER_QUERY"
+  },
+  {
+   "text": "what's the whether like",
+   "intent": "WEATHER_QUERY"
+  },
+  {
+   "text": "wheather today",
+   "intent": "WEATHER_QUERY"
+  },
+  {
+   "text": "is it hot outside",
+   "intent": "WEATHER_QUERY"
+  },
+  {
+   "text": "what will the weather be like this weekend",
+   "intent": "WEATHER_QUERY"
+  },
+  {
+   "text": "any rain today",
+   "intent": "WEATHER_QUERY"
+  },
+  {
+   "text": "how warm is it",
+   "intent": "WEATHER_QUERY"
+  },
+  {
+   "text": "weather for tomorrow",
+   "intent": "WEATHER_QUERY"
+  },
+  {
+   "text": "is there a storm coming",
+   "intent": "WEATHER_QUERY"
+  },
+  {
+   "text": "what is the weather in tokyo right now",
+   "intent": "WEATHER_QUERY"
+  },
+  {
+   "text": "climate today",
+   "intent": "WEATHER_QUERY"
+  },
+  {
+   "text": "give me the weather forecast for bangalore",
+   "intent": "WEATHER_QUERY"
+  },
+  {
+   "text": "open youtube",
+   "intent": "OPEN_WEBSITE"
+  },
+  {
+   "text": "launch google",
+   "intent": "OPEN_WEBSITE"
+  },
+  {
+   "text": "open github",
+   "intent": "OPEN_WEBSITE"
+  },
+  {
+   "text": "go to spotify",
+   "intent": "OPEN_WEBSITE"
+  },
+  {
+   "text": "open gmail",
+   "intent": "OPEN_WEBSITE"
+  },
+  {
+   "text": "open google",
+   "intent": "OPEN_WEBSITE"
+  },
+  {
+   "text": "take me to youtube",
+   "intent": "OPEN_WEBSITE"
+  },
+  {
+   "text": "can you open github for me",
+   "intent": "OPEN_WEBSITE"
+  },
+  {
+   "text": "please open wikipedia",
+   "intent": "OPEN_WEBSITE"
+  },
+  {
+   "text": "open my email",
+   "intent": "OPEN_WEBSITE"
+  },
+  {
+   "text": "go to stack overflow",
+   "intent": "OPEN_WEBSITE"
+  },
+  {
+   "text": "launch youtube",
+   "intent": "OPEN_WEBSITE"
+  },
+  {
+   "text": "open spotify",
+   "intent": "OPEN_WEBSITE"
+  },
+  {
+   "text": "browse to github",
+   "intent": "OPEN_WEBSITE"
+  },
+  {
+   "text": "open linkedin",
+   "intent": "OPEN_WEBSITE"
+  },
+  {
+   "text": "visit reddit",
+   "intent": "OPEN_WEBSITE"
+  },
+  {
+   "text": "open the youtube website",
+   "intent": "OPEN_WEBSITE"
+  },
+  {
+   "text": "pull up google",
+   "intent": "OPEN_WEBSITE"
+  },
+  {
+   "text": "show me youtube",
+   "intent": "OPEN_WEBSITE"
+  },
+  {
+   "text": "load gmail",
+   "intent": "OPEN_WEBSITE"
+  },
+  {
+   "text": "open google maps",
+   "intent": "OPEN_WEBSITE"
+  },
+  {
+   "text": "go to amazon",
+   "intent": "OPEN_WEBSITE"
+  },
+  {
+   "text": "open netflix",
+   "intent": "OPEN_WEBSITE"
+  },
+  {
+   "text": "open you tube",
+   "intent": "OPEN_WEBSITE"
+  },
+  {
+   "text": "open git hub",
+   "intent": "OPEN_WEBSITE"
+  },
+  {
+   "text": "navigate to wikipedia",
+   "intent": "OPEN_WEBSITE"
+  },
+  {
+   "text": "open google drive",
+   "intent": "OPEN_WEBSITE"
+  },
+  {
+   "text": "open my calendar",
+   "intent": "OPEN_WEBSITE"
+  },
+  {
+   "text": "open the browser to google",
+   "intent": "OPEN_WEBSITE"
+  },
+  {
+   "text": "go to youtube dot com",
+   "intent": "OPEN_WEBSITE"
+  },
+  {
+   "text": "open stackoverflow",
+   "intent": "OPEN_WEBSITE"
+  },
+  {
+   "text": "can you launch spotify",
+   "intent": "OPEN_WEBSITE"
+  },
+  {
+   "text": "start youtube",
+   "intent": "OPEN_WEBSITE"
+  },
+  {
+   "text": "fire up github",
+   "intent": "OPEN_WEBSITE"
+  },
+  {
+   "text": "open a website",
+   "intent": "OPEN_WEBSITE"
+  },
+  {
+   "text": "open website",
+   "intent": "OPEN_WEBSITE"
+  },
+  {
+   "text": "open a new tab with google",
+   "intent": "OPEN_WEBSITE"
+  },
+  {
+   "text": "i want to watch youtube",
+   "intent": "OPEN_WEBSITE"
+  },
+  {
+   "text": "let me check my gmail",
+   "intent": "OPEN_WEBSITE"
+  },
+  {
+   "text": "open twitter",
+   "intent": "OPEN_WEBSITE"
+  },
+  {
+   "text": "open chat gpt",
+   "intent": "OPEN_WEBSITE"
+  },
+  {
+   "text": "open google news",
+   "intent": "OPEN_WEBSITE"
+  },
+  {
+   "text": "bring up linkedin",
+   "intent": "OPEN_WEBSITE"
+  },
+  {
+   "text": "open outlook",
+   "intent": "OPEN_WEBSITE"
+  },
+  {
+   "text": "go to the github page",
+   "intent": "OPEN_WEBSITE"
+  },
+  {
+   "text": "explain machine learning",
+   "intent": "ASK_QUESTION"
+  },
+  {
+   "text": "what is artificial intelligence",
+   "intent": "ASK_QUESTION"
+  },
+  {
+   "text": "why is the sky blue",
+   "intent": "ASK_QUESTION"
+  },
+  {
+   "text": "tell me about neural networks",
+   "intent": "ASK_QUESTION"
+  },
+  {
+   "text": "what is deep learning",
+   "intent": "ASK_QUESTION"
+  },
+  {
+   "text": "who invented the telephone",
+   "intent": "ASK_QUESTION"
+  },
+  {
+   "text": "how does a computer work",
+   "intent": "ASK_QUESTION"
+  },
+  {
+   "text": "what is the capital of france",
+   "intent": "ASK_QUESTION"
+  },
+  {
+   "text": "explain natural language processing",
+   "intent": "ASK_QUESTION"
+  },
+  {
+   "text": "what is logistic regression",
+   "intent": "ASK_QUESTION"
+  },
+  {
+   "text": "how do airplanes fly",
+   "intent": "ASK_QUESTION"
+  },
+  {
+   "text": "what is photosynthesis",
+   "intent": "ASK_QUESTION"
+  },
+  {
+   "text": "can you explain quantum computing",
+   "intent": "ASK_QUESTION"
+  },
+  {
+   "text": "what does tf idf mean",
+   "intent": "ASK_QUESTION"
+  },
+  {
+   "text": "who is alan turing",
+   "intent": "ASK_QUESTION"
+  },
+  {
+   "text": "what is an intelligent agent",
+   "intent": "ASK_QUESTION"
+  },
+  {
+   "text": "explain reinforcement learning",
+   "intent": "ASK_QUESTION"
+  },
+  {
+   "text": "how does the internet work",
+   "intent": "ASK_QUESTION"
+  },
+  {
+   "text": "what is the difference between ai and machine learning",
+   "intent": "ASK_QUESTION"
+  },
+  {
+   "text": "tell me a fun fact",
+   "intent": "ASK_QUESTION"
+  },
+  {
+   "text": "what is python",
+   "intent": "ASK_QUESTION"
+  },
+  {
+   "text": "why do we dream",
+   "intent": "ASK_QUESTION"
+  },
+  {
+   "text": "how far is the moon",
+   "intent": "ASK_QUESTION"
+  },
+  {
+   "text": "what is overfitting",
+   "intent": "ASK_QUESTION"
+  },
+  {
+   "text": "define supervised learning",
+   "intent": "ASK_QUESTION"
+  },
+  {
+   "text": "explain the theory of relativity",
+   "intent": "ASK_QUESTION"
+  },
+  {
+   "text": "what is a black hole",
+   "intent": "ASK_QUESTION"
+  },
+  {
+   "text": "how does speech recognition work",
+   "intent": "ASK_QUESTION"
+  },
+  {
+   "text": "what is a large language model",
+   "intent": "ASK_QUESTION"
+  },
+  {
+   "text": "tell me about the solar system",
+   "intent": "ASK_QUESTION"
+  },
+  {
+   "text": "what is a confusion matrix",
+   "intent": "ASK_QUESTION"
+  },
+  {
+   "text": "how do vaccines work",
+   "intent": "ASK_QUESTION"
+  },
+  {
+   "text": "what is gravity",
+   "intent": "ASK_QUESTION"
+  },
+  {
+   "text": "tell me a joke",
+   "intent": "ASK_QUESTION"
+  },
+  {
+   "text": "explain what an api is",
+   "intent": "ASK_QUESTION"
+  },
+  {
+   "text": "who wrote romeo and juliet",
+   "intent": "ASK_QUESTION"
+  },
+  {
+   "text": "what is climate change",
+   "intent": "ASK_QUESTION"
+  },
+  {
+   "text": "why is the ocean salty",
+   "intent": "ASK_QUESTION"
+  },
+  {
+   "text": "what are you",
+   "intent": "ASK_QUESTION"
+  },
+  {
+   "text": "who made you",
+   "intent": "ASK_QUESTION"
+  },
+  {
+   "text": "what can you do",
+   "intent": "ASK_QUESTION"
+  },
+  {
+   "text": "how does a neural network learn",
+   "intent": "ASK_QUESTION"
+  },
+  {
+   "text": "explain precision and recall",
+   "intent": "ASK_QUESTION"
+  },
+  {
+   "text": "what is the meaning of life",
+   "intent": "ASK_QUESTION"
+  },
+  {
+   "text": "describe how rainbows form",
+   "intent": "ASK_QUESTION"
+  },
+  {
+   "text": "what is blockchain",
+   "intent": "ASK_QUESTION"
+  },
+  {
+   "text": "how many planets are there",
+   "intent": "ASK_QUESTION"
+  },
+  {
+   "text": "play some music",
+   "intent": "UNKNOWN"
+  },
+  {
+   "text": "order a pizza",
+   "intent": "UNKNOWN"
+  },
+  {
+   "text": "turn on the lights",
+   "intent": "UNKNOWN"
+  },
+  {
+   "text": "send an email to john",
+   "intent": "UNKNOWN"
+  },
+  {
+   "text": "call mom",
+   "intent": "UNKNOWN"
+  },
+  {
+   "text": "book a flight to delhi",
+   "intent": "UNKNOWN"
+  },
+  {
+   "text": "banana",
+   "intent": "UNKNOWN"
+  },
+  {
+   "text": "asdf jkl",
+   "intent": "UNKNOWN"
+  },
+  {
+   "text": "the cat sat on the mat",
+   "intent": "UNKNOWN"
+  },
+  {
+   "text": "i like turtles",
+   "intent": "UNKNOWN"
+  },
+  {
+   "text": "translate hello to french",
+   "intent": "UNKNOWN"
+  },
+  {
+   "text": "what is my bank balance",
+   "intent": "UNKNOWN"
+  },
+  {
+   "text": "take a screenshot",
+   "intent": "UNKNOWN"
+  },
+  {
+   "text": "shut down my computer",
+   "intent": "UNKNOWN"
+  },
+  {
+   "text": "delete all my files",
+   "intent": "UNKNOWN"
+  },
+  {
+   "text": "buy me a new phone",
+   "intent": "UNKNOWN"
+  },
+  {
+   "text": "lorem ipsum dolor",
+   "intent": "UNKNOWN"
+  },
+  {
+   "text": "purple monkey dishwasher",
+   "intent": "UNKNOWN"
+  },
+  {
+   "text": "turn up the volume",
+   "intent": "UNKNOWN"
+  },
+  {
+   "text": "post this on instagram",
+   "intent": "UNKNOWN"
+  },
+  {
+   "text": "hack my neighbor's wifi",
+   "intent": "UNKNOWN"
+  },
+  {
+   "text": "drive me home",
+   "intent": "UNKNOWN"
+  },
+  {
+   "text": "make me a sandwich",
+   "intent": "UNKNOWN"
+  },
+  {
+   "text": "blah blah blah",
+   "intent": "UNKNOWN"
+  },
+  {
+   "text": "send a text to sarah",
+   "intent": "UNKNOWN"
+  },
+  {
+   "text": "play the next song",
+   "intent": "UNKNOWN"
+  },
+  {
+   "text": "pause the video",
+   "intent": "UNKNOWN"
+  },
+  {
+   "text": "lock my computer",
+   "intent": "UNKNOWN"
+  },
+  {
+   "text": "turn off bluetooth",
+   "intent": "UNKNOWN"
+  },
+  {
+   "text": "install photoshop",
+   "intent": "UNKNOWN"
+  },
+  {
+   "text": "run command prompt",
+   "intent": "UNKNOWN"
+  },
+  {
+   "text": "format the hard drive",
+   "intent": "UNKNOWN"
+  },
+  {
+   "text": "order an uber",
+   "intent": "UNKNOWN"
+  },
+  {
+   "text": "find my phone",
+   "intent": "UNKNOWN"
+  },
+  {
+   "text": "record a video",
+   "intent": "UNKNOWN"
+  },
+  {
+   "text": "take a photo",
+   "intent": "UNKNOWN"
+  },
+  {
+   "text": "skip this track",
+   "intent": "UNKNOWN"
+  },
+  {
+   "text": "increase brightness",
+   "intent": "UNKNOWN"
+  },
+  {
+   "text": "mute",
+   "intent": "UNKNOWN"
+  },
+  {
+   "text": "um",
+   "intent": "UNKNOWN"
+  },
+  {
+   "text": "hmm okay",
+   "intent": "UNKNOWN"
+  },
+  {
+   "text": "nothing",
+   "intent": "UNKNOWN"
+  },
+  {
+   "text": "never mind that",
+   "intent": "UNKNOWN"
+  },
+  {
+   "text": "sing me a song",
+   "intent": "UNKNOWN"
+  },
+  {
+   "text": "dance for me",
+   "intent": "UNKNOWN"
+  },
+  {
+   "text": "buy bitcoin",
+   "intent": "UNKNOWN"
+  },
+  {
+   "text": "transfer money to my friend",
+   "intent": "UNKNOWN"
+  },
+  {
+   "text": "close all windows",
+   "intent": "UNKNOWN"
+  },
+  {
+   "text": "xyz",
+   "intent": "UNKNOWN"
+  },
+  {
+   "text": "the quick brown fox",
+   "intent": "UNKNOWN"
+  },
+  {
+   "text": "potato",
+   "intent": "UNKNOWN"
+  },
+  {
+   "text": "connect to wifi",
+   "intent": "UNKNOWN"
+  },
+  {
+   "text": "switch on the fan",
+   "intent": "UNKNOWN"
+  },
+  {
+   "text": "turn off the tv",
+   "intent": "UNKNOWN"
+  },
+  {
+   "text": "dim the lights",
+   "intent": "UNKNOWN"
+  },
+  {
+   "text": "open the garage door",
+   "intent": "UNKNOWN"
+  },
+  {
+   "text": "start the car",
+   "intent": "UNKNOWN"
+  }
+ ]
+}

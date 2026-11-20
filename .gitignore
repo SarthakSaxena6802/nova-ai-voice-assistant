@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+
+# Local data & secrets
+.env
+backend/.env
+backend/data/
+*.db
+*.db-wal
+*.db-shm
+
+# Trained model artifacts (regenerate with: python ml/train_model.py)
+backend/artifacts/*.joblib
+
+# Node / frontend
+node_modules/
+frontend/dist/
+frontend/.env
+
+# Editors / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.tsbuildinfo

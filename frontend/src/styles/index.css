@@ -1,0 +1,132 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Design tokens (space-separated RGB so Tailwind can apply alpha). Dark is the default. */
+:root,
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: 10 11 14;
+  --surface: 18 19 24;
+  --surface-2: 24 26 32;
+  --surface-3: 33 36 44;
+  --line: 40 43 52;
+  --ink: 236 237 241;
+  --ink-2: 168 172 184;
+  --muted: 112 117 132;
+  --accent: 132 116 246;
+  --accent-2: 64 178 230;
+  --good: 52 199 128;
+  --warn: 238 170 56;
+  --bad: 240 98 98;
+  --info: 96 160 240;
+
+  /* Chart palette (validated dark steps) */
+  --chart-1: #3987e5;
+  --chart-2: #d95926;
+  --chart-grid: rgb(255 255 255 / 0.06);
+  --chart-axis: #8a8f9c;
+  --heat-0: #1b2230;
+  --heat-1: #104281;
+  --heat-2: #256abf;
+  --heat-3: #3987e5;
+  --heat-4: #86b6ef;
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+  --bg: 245 245 243;
+  --surface: 255 255 255;
+  --surface-2: 248 248 246;
+  --surface-3: 238 238 235;
+  --line: 226 226 222;
+  --ink: 20 21 26;
+  --ink-2: 82 84 94;
+  --muted: 124 127 138;
+  --accent: 98 80 214;
+  --accent-2: 30 140 200;
+  --good: 22 150 90;
+  --warn: 190 120 0;
+  --bad: 210 60 60;
+  --info: 42 120 214;
+
+  --chart-1: #2a78d6;
+  --chart-2: #eb6834;
+  --chart-grid: rgb(0 0 0 / 0.06);
+  --chart-axis: #6b6e78;
+  --heat-0: #f1f4f9;
+  --heat-1: #cde2fb;
+  --heat-2: #86b6ef;
+  --heat-3: #3987e5;
+  --heat-4: #1c5cab;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  @apply bg-bg text-ink font-sans antialiased;
+  background-image: radial-gradient(1200px 600px at 85% -10%, rgb(var(--accent) / 0.07), transparent 60%),
+    radial-gradient(900px 500px at -10% 110%, rgb(var(--accent-2) / 0.05), transparent 60%);
+  background-attachment: fixed;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(var(--line)) transparent;
+}
+
+::selection {
+  background: rgb(var(--accent) / 0.35);
+}
+
+@layer components {
+  .card {
+    @apply rounded-2xl border border-line/70 bg-surface/80 shadow-card backdrop-blur-sm;
+  }
+  .card-pad {
+    @apply p-5;
+  }
+  .section-title {
+    @apply text-[13px] font-semibold uppercase tracking-[0.08em] text-muted;
+  }
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl px-3.5 py-2 text-sm font-medium transition
+      disabled:cursor-not-allowed disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60;
+  }
+  .btn-primary {
+    @apply btn bg-accent text-white hover:bg-accent/90;
+  }
+  .btn-ghost {
+    @apply btn text-ink2 hover:bg-surface3 hover:text-ink;
+  }
+  .btn-outline {
+    @apply btn border border-line bg-surface2 text-ink hover:bg-surface3;
+  }
+  .btn-danger {
+    @apply btn border border-bad/30 bg-bad/10 text-bad hover:bg-bad/20;
+  }
+  .input {
+    @apply w-full rounded-xl border border-line bg-surface2 px-3.5 py-2.5 text-sm text-ink placeholder:text-muted
+      focus:border-accent/60 focus:outline-none focus:ring-2 focus:ring-accent/20;
+  }
+  .chip {
+    @apply inline-flex items-center gap-1.5 rounded-full border border-line bg-surface2 px-2.5 py-1 text-xs text-ink2;
+  }
+  .mono {
+    @apply font-mono text-[12.5px];
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+  }
+}

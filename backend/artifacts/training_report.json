@@ -1,0 +1,567 @@
+{
+  "model_version": "20261120-194121",
+  "model_name": "TF-IDF (word + char n-grams) + Logistic Regression",
+  "trained_at": "2026-11-20T19:41:21",
+  "dataset_path": "intents.json",
+  "dataset_size": 517,
+  "class_counts": {
+    "ASK_QUESTION": 47,
+    "CALCULATE": 52,
+    "CREATE_REMINDER": 52,
+    "FOCUS_MODE": 45,
+    "GET_DATE": 41,
+    "GET_TIME": 42,
+    "GREETING": 46,
+    "OPEN_WEBSITE": 45,
+    "SET_TIMER": 47,
+    "UNKNOWN": 57,
+    "WEATHER_QUERY": 43
+  },
+  "train_size": 413,
+  "test_size": 104,
+  "refit_on_full_dataset": true,
+  "hyperparameters": {
+    "C": 100.0,
+    "C_grid": [
+      1.0,
+      3.0,
+      10.0,
+      30.0,
+      100.0,
+      300.0
+    ],
+    "cv_best_macro_f1": 0.9031,
+    "word_ngrams": [
+      1,
+      2
+    ],
+    "char_ngrams": [
+      2,
+      5
+    ],
+    "class_weight": "balanced"
+  },
+  "metrics": {
+    "accuracy": 0.9038,
+    "precision_macro": 0.9073,
+    "recall_macro": 0.9034,
+    "f1_macro": 0.903,
+    "test_mean_confidence": 0.8859,
+    "cv_accuracy_mean": 0.9129,
+    "cv_accuracy_std": 0.0255,
+    "unseen_accuracy": 1.0
+  },
+  "test_metrics": {
+    "accuracy": 0.9038,
+    "precision_macro": 0.9073,
+    "recall_macro": 0.9034,
+    "f1_macro": 0.903,
+    "precision_weighted": 0.9103,
+    "recall_weighted": 0.9038,
+    "f1_weighted": 0.9049,
+    "per_class": {
+      "ASK_QUESTION": {
+        "precision": 0.7778,
+        "recall": 0.7778,
+        "f1": 0.7778,
+        "support": 9
+      },
+      "CALCULATE": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "support": 11
+      },
+      "CREATE_REMINDER": {
+        "precision": 1.0,
+        "recall": 0.9091,
+        "f1": 0.9524,
+        "support": 11
+      },
+      "FOCUS_MODE": {
+        "precision": 0.9,
+        "recall": 1.0,
+        "f1": 0.9474,
+        "support": 9
+      },
+      "GET_DATE": {
+        "precision": 0.875,
+        "recall": 0.875,
+        "f1": 0.875,
+        "support": 8
+      },
+      "GET_TIME": {
+        "precision": 1.0,
+        "recall": 0.875,
+        "f1": 0.9333,
+        "support": 8
+      },
+      "GREETING": {
+        "precision": 0.7,
+        "recall": 0.7778,
+        "f1": 0.7368,
+        "support": 9
+      },
+      "OPEN_WEBSITE": {
+        "precision": 1.0,
+        "recall": 0.8889,
+        "f1": 0.9412,
+        "support": 9
+      },
+      "SET_TIMER": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "support": 9
+      },
+      "UNKNOWN": {
+        "precision": 0.9091,
+        "recall": 0.8333,
+        "f1": 0.8696,
+        "support": 12
+      },
+      "WEATHER_QUERY": {
+        "precision": 0.8182,
+        "recall": 1.0,
+        "f1": 0.9,
+        "support": 9
+      }
+    },
+    "confusion_matrix": {
+      "labels": [
+        "ASK_QUESTION",
+        "CALCULATE",
+        "CREATE_REMINDER",
+        "FOCUS_MODE",
+        "GET_DATE",
+        "GET_TIME",
+        "GREETING",
+        "OPEN_WEBSITE",
+        "SET_TIMER",
+        "UNKNOWN",
+        "WEATHER_QUERY"
+      ],
+      "matrix": [
+        [
+          7,
+          0,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          11,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          10,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          9,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          7,
+          0,
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          1,
+          7,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          7,
+          0,
+          0,
+          1,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          1,
+          8,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          9,
+          0,
+          0
+        ],
+        [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          10,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          9
+        ]
+      ]
+    }
+  },
+  "misclassified_test_examples": [
+    {
+      "text": "sup",
+      "expected": "GREETING",
+      "predicted": "UNKNOWN"
+    },
+    {
+      "text": "how do you do",
+      "expected": "GREETING",
+      "predicted": "ASK_QUESTION"
+    },
+    {
+      "text": "what hour is it",
+      "expected": "GET_TIME",
+      "predicted": "GET_DATE"
+    },
+    {
+      "text": "is it the weekend",
+      "expected": "GET_DATE",
+      "predicted": "WEATHER_QUERY"
+    },
+    {
+      "text": "don't let me forget to pay rent on friday",
+      "expected": "CREATE_REMINDER",
+      "predicted": "FOCUS_MODE"
+    },
+    {
+      "text": "nothing",
+      "expected": "UNKNOWN",
+      "predicted": "GREETING"
+    },
+    {
+      "text": "how far is the moon",
+      "expected": "ASK_QUESTION",
+      "predicted": "WEATHER_QUERY"
+    },
+    {
+      "text": "what are you",
+      "expected": "ASK_QUESTION",
+      "predicted": "GREETING"
+    },
+    {
+      "text": "what is my bank balance",
+      "expected": "UNKNOWN",
+      "predicted": "ASK_QUESTION"
+    },
+    {
+      "text": "bring up linkedin",
+      "expected": "OPEN_WEBSITE",
+      "predicted": "GREETING"
+    }
+  ],
+  "cv_scores": [
+    0.9327,
+    0.9231,
+    0.8641,
+    0.932,
+    0.9126
+  ],
+  "unseen_evaluation": {
+    "size": 35,
+    "accuracy": 1.0,
+    "mean_confidence": 0.9635,
+    "examples": [
+      {
+        "text": "yo nova whats good",
+        "expected": "GREETING",
+        "predicted": "GREETING",
+        "confidence": 0.8592
+      },
+      {
+        "text": "hey, hope you are well",
+        "expected": "GREETING",
+        "predicted": "GREETING",
+        "confidence": 0.9982
+      },
+      {
+        "text": "good morning to you",
+        "expected": "GREETING",
+        "predicted": "GREETING",
+        "confidence": 0.9986
+      },
+      {
+        "text": "got the time",
+        "expected": "GET_TIME",
+        "predicted": "GET_TIME",
+        "confidence": 0.9998
+      },
+      {
+        "text": "what time have we got now",
+        "expected": "GET_TIME",
+        "predicted": "GET_TIME",
+        "confidence": 0.9949
+      },
+      {
+        "text": "nova can you tell me the time right now",
+        "expected": "GET_TIME",
+        "predicted": "GET_TIME",
+        "confidence": 0.9878
+      },
+      {
+        "text": "which day are we on",
+        "expected": "GET_DATE",
+        "predicted": "GET_DATE",
+        "confidence": 0.9687
+      },
+      {
+        "text": "what's the date going to be tomorrow",
+        "expected": "GET_DATE",
+        "predicted": "GET_DATE",
+        "confidence": 0.9503
+      },
+      {
+        "text": "tell me today's day",
+        "expected": "GET_DATE",
+        "predicted": "GET_DATE",
+        "confidence": 0.9826
+      },
+      {
+        "text": "what is 72 divided by 8",
+        "expected": "CALCULATE",
+        "predicted": "CALCULATE",
+        "confidence": 0.9986
+      },
+      {
+        "text": "compute thirty times twelve",
+        "expected": "CALCULATE",
+        "predicted": "CALCULATE",
+        "confidence": 0.9839
+      },
+      {
+        "text": "what's the square root of 49",
+        "expected": "CALCULATE",
+        "predicted": "CALCULATE",
+        "confidence": 0.9922
+      },
+      {
+        "text": "could you start a countdown for five minutes",
+        "expected": "SET_TIMER",
+        "predicted": "SET_TIMER",
+        "confidence": 0.9929
+      },
+      {
+        "text": "timer for twenty minutes please",
+        "expected": "SET_TIMER",
+        "predicted": "SET_TIMER",
+        "confidence": 0.9987
+      },
+      {
+        "text": "stop my countdown",
+        "expected": "SET_TIMER",
+        "predicted": "SET_TIMER",
+        "confidence": 0.856
+      },
+      {
+        "text": "remind me to buy eggs at 6 pm",
+        "expected": "CREATE_REMINDER",
+        "predicted": "CREATE_REMINDER",
+        "confidence": 0.9998
+      },
+      {
+        "text": "please set a reminder to call the bank tomorrow",
+        "expected": "CREATE_REMINDER",
+        "predicted": "CREATE_REMINDER",
+        "confidence": 0.9979
+      },
+      {
+        "text": "which reminders are pending",
+        "expected": "CREATE_REMINDER",
+        "predicted": "CREATE_REMINDER",
+        "confidence": 0.9395
+      },
+      {
+        "text": "start a focus block of forty minutes",
+        "expected": "FOCUS_MODE",
+        "predicted": "FOCUS_MODE",
+        "confidence": 0.9605
+      },
+      {
+        "text": "i really need to concentrate now",
+        "expected": "FOCUS_MODE",
+        "predicted": "FOCUS_MODE",
+        "confidence": 0.9294
+      },
+      {
+        "text": "end my focus mode",
+        "expected": "FOCUS_MODE",
+        "predicted": "FOCUS_MODE",
+        "confidence": 0.9985
+      },
+      {
+        "text": "is it going to be sunny tomorrow",
+        "expected": "WEATHER_QUERY",
+        "predicted": "WEATHER_QUERY",
+        "confidence": 0.7509
+      },
+      {
+        "text": "what is the temperature like in chennai",
+        "expected": "WEATHER_QUERY",
+        "predicted": "WEATHER_QUERY",
+        "confidence": 0.9948
+      },
+      {
+        "text": "will i need an umbrella tomorrow",
+        "expected": "WEATHER_QUERY",
+        "predicted": "WEATHER_QUERY",
+        "confidence": 0.9896
+      },
+      {
+        "text": "could you open youtube for me",
+        "expected": "OPEN_WEBSITE",
+        "predicted": "OPEN_WEBSITE",
+        "confidence": 0.9949
+      },
+      {
+        "text": "pull up github please",
+        "expected": "OPEN_WEBSITE",
+        "predicted": "OPEN_WEBSITE",
+        "confidence": 0.9762
+      },
+      {
+        "text": "open wikipedia in the browser",
+        "expected": "OPEN_WEBSITE",
+        "predicted": "OPEN_WEBSITE",
+        "confidence": 0.9848
+      },
+      {
+        "text": "explain how decision trees work",
+        "expected": "ASK_QUESTION",
+        "predicted": "ASK_QUESTION",
+        "confidence": 0.9976
+      },
+      {
+        "text": "what is computer vision",
+        "expected": "ASK_QUESTION",
+        "predicted": "ASK_QUESTION",
+        "confidence": 0.9436
+      },
+      {
+        "text": "why do leaves change colour",
+        "expected": "ASK_QUESTION",
+        "predicted": "ASK_QUESTION",
+        "confidence": 0.9847
+      },
+      {
+        "text": "set an alarm for 7 tomorrow morning",
+        "expected": "CREATE_REMINDER",
+        "predicted": "CREATE_REMINDER",
+        "confidence": 0.9886
+      },
+      {
+        "text": "wake me at six thirty am",
+        "expected": "CREATE_REMINDER",
+        "predicted": "CREATE_REMINDER",
+        "confidence": 0.8989
+      },
+      {
+        "text": "play my workout playlist",
+        "expected": "UNKNOWN",
+        "predicted": "UNKNOWN",
+        "confidence": 0.9219
+      },
+      {
+        "text": "switch off the fan",
+        "expected": "UNKNOWN",
+        "predicted": "UNKNOWN",
+        "confidence": 0.9585
+      },
+      {
+        "text": "send money to rahul",
+        "expected": "UNKNOWN",
+        "predicted": "UNKNOWN",
+        "confidence": 0.9498
+      }
+    ]
+  }
+}

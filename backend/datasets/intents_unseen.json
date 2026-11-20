@@ -1,0 +1,146 @@
+{
+ "name": "Nova unseen evaluation set",
+ "description": "Phrasings that never appear in intents.json; used to sanity-check generalisation.",
+ "examples": [
+  {
+   "text": "yo nova whats good",
+   "intent": "GREETING"
+  },
+  {
+   "text": "hey, hope you are well",
+   "intent": "GREETING"
+  },
+  {
+   "text": "good morning to you",
+   "intent": "GREETING"
+  },
+  {
+   "text": "got the time",
+   "intent": "GET_TIME"
+  },
+  {
+   "text": "what time have we got now",
+   "intent": "GET_TIME"
+  },
+  {
+   "text": "nova can you tell me the time right now",
+   "intent": "GET_TIME"
+  },
+  {
+   "text": "which day are we on",
+   "intent": "GET_DATE"
+  },
+  {
+   "text": "what's the date going to be tomorrow",
+   "intent": "GET_DATE"
+  },
+  {
+   "text": "tell me today's day",
+   "intent": "GET_DATE"
+  },
+  {
+   "text": "what is 72 divided by 8",
+   "intent": "CALCULATE"
+  },
+  {
+   "text": "compute thirty times twelve",
+   "intent": "CALCULATE"
+  },
+  {
+   "text": "what's the square root of 49",
+   "intent": "CALCULATE"
+  },
+  {
+   "text": "could you start a countdown for five minutes",
+   "intent": "SET_TIMER"
+  },
+  {
+   "text": "timer for twenty minutes please",
+   "intent": "SET_TIMER"
+  },
+  {
+   "text": "stop my countdown",
+   "intent": "SET_TIMER"
+  },
+  {
+   "text": "remind me to buy eggs at 6 pm",
+   "intent": "CREATE_REMINDER"
+  },
+  {
+   "text": "please set a reminder to call the bank tomorrow",
+   "intent": "CREATE_REMINDER"
+  },
+  {
+   "text": "which reminders are pending",
+   "intent": "CREATE_REMINDER"
+  },
+  {
+   "text": "start a focus block of forty minutes",
+   "intent": "FOCUS_MODE"
+  },
+  {
+   "text": "i really need to concentrate now",
+   "intent": "FOCUS_MODE"
+  },
+  {
+   "text": "end my focus mode",
+   "intent": "FOCUS_MODE"
+  },
+  {
+   "text": "is it going to be sunny tomorrow",
+   "intent": "WEATHER_QUERY"
+  },
+  {
+   "text": "what is the temperature like in chennai",
+   "intent": "WEATHER_QUERY"
+  },
+  {
+   "text": "will i need an umbrella tomorrow",
+   "intent": "WEATHER_QUERY"
+  },
+  {
+   "text": "could you open youtube for me",
+   "intent": "OPEN_WEBSITE"
+  },
+  {
+   "text": "pull up github please",
+   "intent": "OPEN_WEBSITE"
+  },
+  {
+   "text": "open wikipedia in the browser",
+   "intent": "OPEN_WEBSITE"
+  },
+  {
+   "text": "explain how decision trees work",
+   "intent": "ASK_QUESTION"
+  },
+  {
+   "text": "what is computer vision",
+   "intent": "ASK_QUESTION"
+  },
+  {
+   "text": "why do leaves change colour",
+   "intent": "ASK_QUESTION"
+  },
+  {
+   "text": "set an alarm for 7 tomorrow morning",
+   "intent": "CREATE_REMINDER"
+  },
+  {
+   "text": "wake me at six thirty am",
+   "intent": "CREATE_REMINDER"
+  },
+  {
+   "text": "play my workout playlist",
+   "intent": "UNKNOWN"
+  },
+  {
+   "text": "switch off the fan",
+   "intent": "UNKNOWN"
+  },
+  {
+   "text": "send money to rahul",
+   "intent": "UNKNOWN"
+  }
+ ]
+}
