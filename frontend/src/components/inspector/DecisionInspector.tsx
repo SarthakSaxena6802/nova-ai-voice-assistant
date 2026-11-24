@@ -1,59 +1,8 @@
 import { AlertTriangle, ArrowRight, Brain, CheckCircle2, CircleSlash, GitBranch, MinusCircle, ScanSearch, XCircle } from "lucide-react";
 import type { ReactNode } from "react";
-import type { FeatureContribution, HistoryItem, IntentScore, PipelineStep, ProcessResult } from "../../types/api";
+import type { ProcessResult } from "../../types/api";
 import { DECISION_META, formatEntityValue, intentLabel, pct } from "../../utils/format";
 import { ConfidenceBar, DecisionBadge, EmptyState, IntentBadge } from "../ui/primitives";
-
-/** Normalised shape so both live results and stored history can be inspected. */
-export interface InspectorData {
-  input: string;
-  source: string;
-  normalized: string;
-  model_input?: string;
-  predicted_intent: string;
-  intent: string;
-  confidence: number;
-  top_intents: IntentScore[];
-  explanation: FeatureContribution[];
-  entities: Record<string, unknown>;
-  missing_entities: string[];
-  thresholds?: { execute: number; clarify: number };
-  decision: string;
-  decision_reason: string;
-  action: string | null;
-  response: string;
-  success: boolean;
-  context_used: string | null;
-  notes: string[];
-  pipeline: PipelineStep[];
-  processing_ms: number;
-}
-
-export const fromResult = (r: ProcessResult): InspectorData => ({ ...r });
-
-export const fromHistory = (h: HistoryItem): InspectorData => ({
-  input: h.raw_input,
-  source: h.source,
-  normalized: h.normalized_input,
-  model_input: h.trace.model_input,
-  predicted_intent: h.trace.predicted_intent ?? h.intent,
-  intent: h.intent,
-  confidence: h.confidence,
-  top_intents: h.alternatives ?? [],
-  explanation: h.trace.explanation ?? [],
-  entities: h.entities,
-  missing_entities: h.trace.missing_entities ?? [],
-  thresholds: h.trace.thresholds,
-  decision: h.decision,
-  decision_reason: h.decision_reason,
-  action: h.action,
-  response: h.response,
-  success: h.success,
-  context_used: h.context_used,
-  notes: h.trace.notes ?? [],
-  pipeline: h.trace.pipeline ?? [],
-  processing_ms: h.processing_ms,
-});
 
 function Section({ step, title, children, aside }: { step: number; title: string; children: ReactNode; aside?: ReactNode }) {
   return (
@@ -73,7 +22,7 @@ function Section({ step, title, children, aside }: { step: number; title: string
 const STEP_ICON = { ok: CheckCircle2, warn: AlertTriangle, error: XCircle, skip: MinusCircle } as const;
 const STEP_TONE = { ok: "text-good", warn: "text-warn", error: "text-bad", skip: "text-muted" } as const;
 
-export function DecisionInspector({ data, compact = false }: { data: InspectorData | null; compact?: boolean }) {
+export function DecisionInspector({ data, compact = false }: { data: ProcessResult | null; compact?: boolean }) {
   if (!data) {
     return (
       <EmptyState icon={ScanSearch} title="No decision to inspect yet">

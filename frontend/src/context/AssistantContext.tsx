@@ -1,9 +1,10 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { useSpeechRecognition, type SpeechRecognitionState } from "../hooks/useSpeechRecognition";
 import { useSpeechSynthesis, type SpeechSynthesisState } from "../hooks/useSpeechSynthesis";
+import { useWakeWord, type WakeWordState } from "../hooks/useWakeWord";
 import { useInterval } from "../hooks/useTimers";
 import { api } from "../services/api";
-import type { FocusStatus, InputSource, ProcessResult, Reminder, Timer } from "../types/api";
+import type { InputSource, ProcessResult, Reminder, Timer } from "../types/api";
 import { greetingFor, sessionId } from "../utils/format";
 import { playChime } from "../utils/sound";
 import { useSettings } from "./SettingsContext";
@@ -39,10 +40,10 @@ interface AssistantContextValue {
   clear: () => Promise<void>;
   recognition: SpeechRecognitionState;
   synthesis: SpeechSynthesisState;
+  wake: WakeWordState;
   toggleListening: () => void;
   timers: Timer[];
   reminders: Reminder[];
-  focus: FocusStatus | null;
   refreshTasks: () => Promise<void>;
   draft: string;
   setDraft: (v: string) => void;
@@ -78,7 +79,6 @@ export function AssistantProvider({ children }: { children: ReactNode }) {
   const [selected, setSelected] = useState<ProcessResult | null>(null);
   const [timers, setTimers] = useState<Timer[]>([]);
   const [reminders, setReminders] = useState<Reminder[]>([]);
-  const [focus, setFocus] = useState<FocusStatus | null>(null);
   const [toasts, setToasts] = useState<Toast[]>([]);
   const [draft, setDraft] = useState("");
   const greeted = useRef(false);
@@ -98,10 +98,9 @@ export function AssistantProvider({ children }: { children: ReactNode }) {
 
   const refreshTasks = useCallback(async () => {
     try {
-      const [t, r, f] = await Promise.all([api.timers(), api.reminders("pending"), api.focus()]);
+      const [t, r] = await Promise.all([api.timers(), api.reminders()]);
       setTimers(t);
       setReminders(r);
-      setFocus(f);
     } catch {
       /* backend offline – status pill shows it */
     }
@@ -124,7 +123,7 @@ export function AssistantProvider({ children }: { children: ReactNode }) {
         if (result.success && result.data?.url && result.data?.opened_by === "client") {
           window.open(result.data.url as string, "_blank", "noopener,noreferrer");
         }
-        if (["SET_TIMER", "CREATE_REMINDER", "FOCUS_MODE"].includes(result.intent)) refreshTasks();
+        if (["SET_TIMER", "CREATE_REMINDER"].includes(result.intent)) refreshTasks();
       } catch (e) {
         setMessages((prev) => [
           ...prev,
@@ -142,14 +141,22 @@ export function AssistantProvider({ children }: { children: ReactNode }) {
     else setDraft(finalText);
   });
 
+  // Hands-free: say "Nova …". Ignores audio while Nova is thinking or speaking.
+  const wake = useWakeWord(settings.wake_word_enabled && online && !recognition.listening, busy || synthesis.speaking, (cmd) =>
+    send(cmd, "voice"),
+  );
+
   const toggleListening = useCallback(() => {
-    if (recognition.listening) {
+    if (wake.state !== "off") {
+      synthesis.cancel();
+      wake.wakeNow(); // one recognizer at a time: the mic button just wakes the hands-free listener
+    } else if (recognition.listening) {
       recognition.stop();
     } else {
       synthesis.cancel();
       recognition.start();
     }
-  }, [recognition, synthesis]);
+  }, [recognition, synthesis, wake]);
 
   const clear = useCallback(async () => {
     synthesis.cancel();
@@ -166,23 +173,17 @@ export function AssistantProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (!loaded || greeted.current) return;
     greeted.current = true;
-    if (settings.greet_on_startup) {
-      const name = settings.user_name ? `, ${settings.user_name}` : "";
-      setMessages((prev) =>
-        prev.length
-          ? prev
-          : [
-              {
-                id: uid(),
-                role: "system",
-                tone: "info",
-                text: `${greetingFor()}${name}! I'm ${settings.assistant_name}. Ask me anything — try the microphone or a quick action.`,
-                time: nowIso(),
-              },
-            ],
-      );
-    }
-  }, [loaded, settings.greet_on_startup, settings.user_name, settings.assistant_name]);
+    const name = settings.user_name ? `, ${settings.user_name}` : "";
+    const hint = settings.wake_word_enabled ? 'Just say "Nova" followed by a command' : "Ask me anything — try the microphone";
+    const greeting: ChatMessage = {
+      id: uid(),
+      role: "system",
+      tone: "info",
+      text: `${greetingFor()}${name}! I'm ${settings.assistant_name}. ${hint} or type below.`,
+      time: nowIso(),
+    };
+    setMessages((prev) => (prev.length ? prev : [greeting]));
+  }, [loaded, settings.user_name, settings.assistant_name, settings.wake_word_enabled]);
 
   // ---------------------------------------------------------------- polling
   useInterval(refreshTasks, 5000, [online]);
@@ -208,7 +209,7 @@ export function AssistantProvider({ children }: { children: ReactNode }) {
     [online],
   );
 
-  const status: AssistantStatus = recognition.listening
+  const status: AssistantStatus = recognition.listening || wake.state === "awake"
     ? "listening"
     : busy
       ? "processing"
@@ -227,10 +228,10 @@ export function AssistantProvider({ children }: { children: ReactNode }) {
     clear,
     recognition,
     synthesis,
+    wake,
     toggleListening,
     timers,
     reminders,
-    focus,
     refreshTasks,
     draft,
     setDraft,

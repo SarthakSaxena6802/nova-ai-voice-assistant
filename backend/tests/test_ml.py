@@ -10,7 +10,7 @@ from app.nlp.preprocessing import normalize_text, prepare_for_classifier
 
 EXPECTED_INTENTS = {
     "GREETING", "GET_TIME", "GET_DATE", "CALCULATE", "SET_TIMER", "CREATE_REMINDER",
-    "FOCUS_MODE", "WEATHER_QUERY", "OPEN_WEBSITE", "ASK_QUESTION", "UNKNOWN",
+    "OPEN_WEBSITE", "ASK_QUESTION", "UNKNOWN",
 }
 
 
@@ -39,8 +39,6 @@ def test_missing_model_is_reported_not_crashing(tmp_path):
         ("which date is it today", "GET_DATE"),
         ("what is 72 divided by 8", "CALCULATE"),
         ("remind me to buy eggs at 6 pm", "CREATE_REMINDER"),
-        ("I want to concentrate for an hour", "FOCUS_MODE"),
-        ("is it going to rain in london", "WEATHER_QUERY"),
         ("explain how decision trees work", "ASK_QUESTION"),
         ("hey nova good evening", "GREETING"),
         ("order me a pizza", "UNKNOWN"),

@@ -1,389 +1,260 @@
-# Nova — AI-Powered Smart Voice Assistant
+# Nova — a Voice Assistant with Its Own ML Brain
 
-Nova is a software smart speaker that runs on your own computer. You speak (or type) a request; Nova
-transcribes it, **classifies the intent with its own locally trained machine-learning model**, extracts the
-parameters, decides — based on the model's confidence — whether to act, ask, or decline, executes the action,
-and answers out loud. Every step of that decision is visible in the **AI Decision Inspector**.
+Nova is a small voice assistant that runs on your computer. You say **"Nova, set a timer for 5 minutes"**;
+Nova turns the speech into text, **classifies the intent with a machine-learning model it trained itself**,
+pulls out the details (5 minutes), decides whether it is confident enough to act, does it, and answers out loud.
 
-It is built as an M.Tech AI/ML project: the emphasis is on a transparent, explainable intent-classification and
-decision pipeline rather than sending everything to a large language model.
+The point of the project is the **decision pipeline**, not the number of features: every reply can be opened in
+the **AI Decision Inspector** to see exactly how the model and the rules arrived at it.
 
-![Dashboard](docs/screenshots/dashboard.png)
-
----
-
-## Contents
-
-1. [Features](#features)
-2. [Architecture](#architecture)
-3. [Tech stack](#tech-stack)
-4. [The ML pipeline](#the-ml-pipeline)
-5. [Decision engine & context](#decision-engine--context)
-6. [Setup (Windows)](#setup-windows)
-7. [Configuration](#configuration)
-8. [API](#api)
-9. [Testing](#testing)
-10. [Project structure](#project-structure)
-11. [Screenshots](#screenshots)
-12. [Limitations](#limitations)
-13. [Future improvements](#future-improvements)
+![Nova](docs/screenshots/home.png)
 
 ---
 
-## Features
+## What Nova can do
 
-| Capability | What it does | Works offline |
+| Intent | Example | Notes |
 |---|---|---|
-| **Voice in / voice out** | Microphone input via the browser's Web Speech API (Chrome/Edge), spoken replies via speech synthesis, voice selection, speech rate, stop button | TTS yes · STT depends on browser |
-| **ML intent classification** | TF-IDF (word + character n-grams) + Logistic Regression trained on a custom 517-sentence dataset, 11 intents | ✔ |
-| **AI Decision Inspector** | Normalised text, model input, top-3 probabilities, contributing n-gram features, entities, thresholds, decision + reason, pipeline timing | ✔ |
-| **Time & date** | Current time, date, weekday, "what day is tomorrow" | ✔ |
-| **Calculator** | + − × ÷, percentages, powers, square/cube roots — parsed with `ast`, **no `eval`** | ✔ |
-| **Timers** | Multiple concurrent timers, status, cancel, follow-ups ("actually make it 15"); run in the backend and survive restarts | ✔ |
-| **Reminders** | Natural date/time parsing ("tomorrow at 9 am", "on monday", "in 2 hours", "tonight"), list/complete/delete, stored in SQLite | ✔ |
-| **Focus mode** | Pomodoro-style countdown with completion notification and session statistics | ✔ |
-| **Open websites** | Fixed allow-list (YouTube, GitHub, Gmail, …) with fuzzy matching for transcription errors; never arbitrary URLs/commands | ✔ |
-| **Weather** | Current conditions & tomorrow's forecast via Open-Meteo (free, no key); clearly says when unavailable, never invents data | needs internet |
-| **Questions** | Offline AI/ML knowledge base (TF-IDF retrieval); optionally Claude (Anthropic) or a local Ollama model | KB ✔ · LLM optional |
-| **Context** | Slot filling across turns, yes/no confirmation, follow-ups to the last action, expiry | ✔ |
-| **History & analytics** | Full history with filters and per-row inspector; usage analytics from real data; model evaluation (confusion matrix, per-class F1) and a classifier playground | ✔ |
-| **Settings** | Name, theme (dark/light), start page, voice, thresholds, context timeout, focus length, weather city, privacy controls — persisted in SQLite | ✔ |
+| `GREETING` | "Hello Nova" | |
+| `GET_TIME` / `GET_DATE` | "What time is it?", "What day is tomorrow?" | offline |
+| `CALCULATE` | "What is 15 percent of 200?" | safe parser, **no `eval`** |
+| `SET_TIMER` | "Set a timer for 10 minutes", "Cancel my timer" | runs in the backend |
+| `CREATE_REMINDER` | "Remind me tomorrow at 9 am to submit the report" | saved in SQLite |
+| `OPEN_WEBSITE` | "Open YouTube" | fixed allow-list only |
+| `ASK_QUESTION` | "Explain machine learning" | small offline knowledge base |
+| `UNKNOWN` | "Play some music" | politely refused |
+
+**Voice:** hands-free — just say **"Nova …"** (wake word). The mic button also works; typing always works.
 
 ---
 
-## Architecture
+## How it works
 
 ```
- Browser (React + TS)                                FastAPI backend (Python)
- ─────────────────────                               ─────────────────────────────────────────────────────────
-  Mic ─► Web Speech STT ─┐                            POST /api/assistant/process
-                         ├─► text ──── REST ────────►  ┌──────────────────────────────────────────────────┐
-  Keyboard / quick action┘                             │ 1. Normalisation      (app/nlp/preprocessing)    │
-                                                       │ 2. Intent classifier  (app/ml/intent_classifier) │
-  Speech synthesis ◄── response ◄──────────────────────│ 3. Context resolution (app/context, engine)      │
-  AI Decision Inspector ◄── full trace                 │ 4. Confidence eval    (app/engine/pipeline)      │
-                                                       │ 5. Entity extraction  (app/nlp/entities)         │
-  Toasts / chime / TTS ◄── GET /api/notifications ◄─┐  │ 6. Decision           EXECUTE/CONFIRM/CLARIFY/…  │
-                                                    │  │ 7. Action registry    (app/actions)              │
-                                                    │  │ 8. Response + history/analytics (SQLite)        │
-                                                    │  └──────────────────────────────────────────────────┘
-                                                    └── Scheduler (asyncio, 1 s): completes timers & focus
-                                                        sessions, fires due reminders → notifications table
+ "Nova, set a timer for five minutes"
+        │  browser speech-to-text (Web Speech API) — only acts when it hears "Nova"
+        ▼
+ 1. Normalise      "set a timer for 5 minutes"        lower-case, "five"→5, wake word removed
+ 2. Classify       SET_TIMER 99%                       TF-IDF + Logistic Regression
+ 3. Context        anything pending from before?       e.g. "At 8 PM" answering "What time?"
+ 4. Confidence     99% ≥ 75%  → allowed to act         thresholds set in Settings
+ 5. Entities       duration = 300 s                    regex + date/number parsers
+ 6. Decide         EXECUTE                             (or CONFIRM / CLARIFY / UNKNOWN)
+ 7. Act            create timer in SQLite              action registry
+ 8. Reply          "Your timer is set for 5 minutes."  spoken by the browser
 ```
 
-Design decisions:
+### Decision rules
 
-- **Own classifier first, LLM optional.** Every request is classified by the local model; an LLM is only
-  consulted for the `ASK_QUESTION` intent and only if configured.
-- **Deterministic entity extraction** (regex + a hand-written date/duration parser) keeps parameters exact and
-  testable; the ML model only decides *what* the user wants.
-- **REST + polling** (2.5 s for notifications) instead of WebSockets — simpler and sufficient for a local app.
-- **Timers live in the backend** with absolute end times in SQLite, so they keep running without a browser tab
-  and survive restarts.
-- **Analytics are anonymised** (`analytics_events` stores intent/confidence/decision only, no text), so clearing
-  history does not erase statistics and vice-versa.
-- **Swappable layers:** speech-to-text and text-to-speech are isolated in two React hooks; LLM providers sit
-  behind one `LLMProvider` interface; the classifier behind `IntentClassifier`.
+| Situation | Decision | What Nova does |
+|---|---|---|
+| confidence < 45 % | `UNKNOWN` | "Sorry, I'm not sure what you meant" — never guesses |
+| model predicts `UNKNOWN` | `UNKNOWN` | "That's not something I can do yet" |
+| 45 % – 75 % | `CONFIRM` | "I think you want me to … — should I go ahead?" |
+| ≥ 75 % but a detail is missing | `CLARIFY` | asks for it ("What time?") and remembers the request |
+| ≥ 75 % and details complete | `EXECUTE` | runs the action |
 
-More detail: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
+### Context (short-term memory)
+
+```
+You:  Remind me to study tomorrow      → CLARIFY   "What time should I remind you?"
+You:  At 8 PM                          → EXECUTE   reminder created (slot filled from context)
+You:  Set a timer for 10 minutes       → EXECUTE
+You:  Actually make it 15              → EXECUTE   timer changed (follow-up to last action)
+You:  Cancel it                        → EXECUTE   timer cancelled
+```
+
+Context expires after 2 minutes (configurable).
 
 ---
 
-## Tech stack
+## Code walkthrough (read in this order)
 
-**Frontend:** React 18, TypeScript, Vite 5, Tailwind CSS 3, lucide-react, Recharts, React Router.
-**Backend:** Python 3.11, FastAPI, Pydantic v2, Uvicorn, SQLAlchemy 2 + SQLite.
-**ML:** scikit-learn (TF-IDF, LogisticRegression, GridSearchCV), pandas/NumPy, joblib.
-**Optional:** `anthropic` SDK (Claude), Ollama (local LLM), Open-Meteo (weather).
-**Testing:** pytest + FastAPI TestClient (108 tests).
+Follow one request through the code — this is everything you need for the viva.
+
+| Step | File | What to look at |
+|---|---|---|
+| 1. Voice in | [frontend/src/hooks/useWakeWord.ts](frontend/src/hooks/useWakeWord.ts) | `splitWake()` and the continuous recognizer that restarts itself |
+| 2. Send | [frontend/src/context/AssistantContext.tsx](frontend/src/context/AssistantContext.tsx) | `send()` → `POST /api/assistant/process`, then speaks the reply |
+| 3. API | [backend/app/api/routes_assistant.py](backend/app/api/routes_assistant.py) | `process()` hands the request to the pipeline |
+| 4. Pipeline | [backend/app/engine/pipeline.py](backend/app/engine/pipeline.py) | `process()` → `_decide()` → `_extract_and_execute()`; context in `_resolve_pending()` / `_resolve_follow_up()` |
+| 5. Normalise | [backend/app/nlp/preprocessing.py](backend/app/nlp/preprocessing.py) | `normalize_text()`, `prepare_for_classifier()` (numbers → `<num>`) |
+| 6. Classify | [backend/app/ml/intent_classifier.py](backend/app/ml/intent_classifier.py) | `predict()` (probabilities) and `_explain()` (which words mattered) |
+| 7. Entities | [backend/app/nlp/entities.py](backend/app/nlp/entities.py) | one extractor per intent; returns entities + missing slots |
+| 8. Actions | [backend/app/actions/](backend/app/actions/) | `registry.py` maps intent → handler; handlers in `basic.py`, `tasks.py`, `external.py` |
+| 9. Background | [backend/app/services/scheduler.py](backend/app/services/scheduler.py) | every second: finish due timers, fire due reminders → notifications |
+| 10. Inspector | [frontend/src/components/inspector/DecisionInspector.tsx](frontend/src/components/inspector/DecisionInspector.tsx) | renders the pipeline trace returned by the API |
+
+Training lives in [backend/app/ml/model.py](backend/app/ml/model.py) (the model) and
+[backend/app/ml/trainer.py](backend/app/ml/trainer.py) (split, grid search, metrics), run by `ml/train_model.py`.
 
 ---
 
-## The ML pipeline
+## The ML model
 
-### Dataset — `backend/datasets/intents.json`
+- **Data** — [backend/datasets/intents.json](backend/datasets/intents.json): 449 hand-written sentences,
+  9 intents (~45 each, 77 `UNKNOWN`), including typos and speech errors ("set a timmer", "open you tube").
+  Format: `{"text": "set a timer for 5 minutes", "intent": "SET_TIMER"}`.
+- **Features** — TF-IDF on word 1–2-grams (phrasing like "remind me") **plus** character 2–5-grams
+  (robust to typos and mis-heard words). Numbers become `<num>` so "7 minutes" and "45 minutes" look the same.
+- **Classifier** — multinomial Logistic Regression. Gives a probability per intent (= confidence) and is
+  explainable: contribution of a word = its TF-IDF value × the class coefficient.
+- **Training** — stratified 80/20 split, regularisation `C` chosen by 5-fold cross-validation, then refit on all data.
 
-517 hand-written utterances, 41–57 per intent, in an easy-to-extend format:
-
-```json
-{ "text": "could you start a countdown for five minutes", "intent": "SET_TIMER" }
-```
-
-It deliberately includes short commands ("timer 10 minutes"), conversational phrasing, synonyms, typos and
-speech-recognition errors ("set a timmer", "what's the whether", "open you tube"), sentences that sit between
-intents ("remind me in 30 seconds" → timer; "set an alarm for 6 am" → reminder), and 57 out-of-scope examples for
-`UNKNOWN` ("play some music", "turn off the tv", gibberish).
-
-`datasets/intents_unseen.json` holds 35 extra phrasings that never appear in the training data and are used as a
-second sanity check of generalisation.
-
-**Intents:** `GREETING`, `GET_TIME`, `GET_DATE`, `CALCULATE`, `SET_TIMER`, `CREATE_REMINDER`, `FOCUS_MODE`,
-`WEATHER_QUERY`, `OPEN_WEBSITE`, `ASK_QUESTION`, `UNKNOWN`.
-
-### Preprocessing — `app/nlp/preprocessing.py` (shared by training and inference)
-
-1. Unicode normalisation, lower-casing, wake-word removal ("Hey Nova, …").
-2. Contractions expanded ("what's" → "what is"), `a.m./p.m.` unified, hyphens split ("5-minute").
-3. Number words → digits ("twenty-five" → 25, "one hundred and fifty" → 150).
-4. For the classifier only: every number becomes a `<num>` placeholder, so "timer for 7 minutes" and
-   "timer for 45 minutes" are the same input. This helps a small dataset generalise.
-
-### Model — `app/ml/model.py`
-
-```
-text ─► FeatureUnion( word TF-IDF 1–2 grams , char_wb TF-IDF 2–5 grams ) ─► LogisticRegression (softmax, balanced)
-```
-
-Word n-grams capture phrasing ("remind me", "what time"); character n-grams make the model robust to typos and
-mis-transcriptions. Logistic regression gives a probability for every intent (used as the confidence score) and is
-fully explainable: the inspector shows the n-grams whose `tf-idf × coefficient` contributed most to the winning class.
-
-### Training — `python ml/train_model.py`
-
-Stratified 80/20 split → 5-fold CV grid search over `C` → evaluation on the held-out split → evaluation on the
-unseen file → refit on all data → `artifacts/intent_model.joblib` + `artifacts/training_report.json`.
-
-Current results (held-out test split, 104 sentences):
+Results (held-out test split of 90 sentences):
 
 | Metric | Value |
 |---|---|
-| Accuracy | **90.4 %** |
-| Macro precision / recall / F1 | 90.7 % / 90.3 % / 90.3 % |
-| 5-fold CV accuracy (full dataset) | 91.3 % ± 2.6 % |
-| Unseen-phrasing accuracy (35 sentences) | 100 % |
-| Selected `C` | 100 |
+| Accuracy | **93.3 %** |
+| Macro precision / recall / F1 | 93.9 % / 93.9 % / 93.9 % |
+| 5-fold cross-validation accuracy | 92.0 % ± 2.1 % |
+| Unseen phrasings (29 sentences never in training) | 100 % |
 
-The weakest classes are `GREETING` and `ASK_QUESTION` (F1 ≈ 0.74–0.78): short, open-ended sentences such as
-"what are you" or "nothing" are genuinely ambiguous. The full confusion matrix and the misclassified sentences
-are printed by the training script and shown on the Analytics page. Because the split is random, numbers move by
-a point or two whenever the dataset changes.
-
-The backend loads the model at start-up (and trains one automatically if it is missing). After retraining you can
-hot-reload it with `POST /api/model/reload` or the **Reload** button in Settings.
+Weakest classes: `GREETING` (F1 0.84) and `UNKNOWN` (0.88) — short sentences like "sup" or "what are you"
+are genuinely ambiguous. `python ml/train_model.py` prints the full per-class table and confusion matrix and
+writes them to `backend/artifacts/training_report.json`.
 
 ---
 
-## Decision engine & context
+## Run it locally (Windows)
 
-`app/engine/pipeline.py` turns a prediction into a decision. Thresholds are user settings (defaults shown):
-
-| Situation | Decision | Behaviour |
-|---|---|---|
-| confidence < 0.45 | `UNKNOWN` | "I'm not sure what you meant" + capability summary |
-| predicted `UNKNOWN` | `UNKNOWN` | "That's not something I can do yet" |
-| 0.45 ≤ confidence < 0.75 | `CONFIRM` | "I think you want me to … — should I go ahead?" (stored as pending) |
-| ≥ 0.75, required entity missing | `CLARIFY` | asks for the missing slot, keeps the request in context |
-| ≥ 0.75, entities complete | `EXECUTE` | runs the registered action |
-| user says "cancel / never mind" while something is pending | `CANCELLED` | drops the pending request |
-
-Context handling (`app/context/manager.py`, expires after `context_timeout_seconds`):
-
-```
-You:  Remind me to study tomorrow          → CLARIFY  "What time should I remind you?"
-You:  At 8 PM                              → EXECUTE  (slot filled from context)
-You:  Set a timer for 10 minutes           → EXECUTE
-You:  Actually make it 15                  → EXECUTE  follow-up: timer updated to 15 minutes
-You:  Cancel it                            → EXECUTE  follow-up: timer cancelled
-```
-
-When context overrides the classifier (e.g. "actually make it 15" on its own looks like `CALCULATE`), the
-inspector shows both the raw prediction and the context-resolved intent.
-
----
-
-## Setup (Windows)
-
-**Prerequisites:** Python 3.11+, Node.js 20+ (tested with Python 3.11.5 and Node 22.14), Chrome or Edge for voice input.
-
-### Quick start
+Needs Python 3.11+, Node 20+, and Chrome or Edge for voice.
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File scripts\setup.ps1   # venv, pip install, train model, npm install
-powershell -ExecutionPolicy Bypass -File scripts\start.ps1   # opens backend + frontend windows and the browser
+powershell -ExecutionPolicy Bypass -File scripts\setup.ps1   # once: install, train model, npm install
+powershell -ExecutionPolicy Bypass -File scripts\start.ps1   # backend :8000 + frontend :5173 + opens browser
 ```
 
-### Manual steps
-
-**Backend** (terminal 1):
+Manual alternative:
 
 ```powershell
+# terminal 1
 cd backend
-python -m venv .venv
-.\.venv\Scripts\Activate.ps1
+python -m venv .venv; .\.venv\Scripts\Activate.ps1
 pip install -r requirements.txt
-python ml\train_model.py                       # trains and evaluates the intent model
-uvicorn app.main:app --reload --port 8000      # API docs: http://127.0.0.1:8000/docs
-```
+python ml\train_model.py
+uvicorn app.main:app --reload --port 8000        # API docs: http://127.0.0.1:8000/docs
 
-**Frontend** (terminal 2):
-
-```powershell
+# terminal 2
 cd frontend
 npm install
-npm run dev                                    # http://localhost:5173
+npm run dev                                      # http://localhost:5173
 ```
 
-The Vite dev server proxies `/api` to `http://127.0.0.1:8000`, so no CORS setup is needed.
-Production build: `npm run build` (output in `frontend/dist`).
+Allow the microphone when the browser asks, then say **"Nova, what time is it?"**.
+
+### Tests
+
+```powershell
+cd backend; .\.venv\Scripts\python.exe -m pytest     # 99 tests
+cd frontend; npm run build                           # type-check + build
+```
+
+Tests cover the model (loads, predicts unseen sentences, probabilities), entity extraction (durations,
+12 reminder phrasings, calculator, websites), every action, the API (validation, clarification, context,
+low confidence, failures) and log redaction.
 
 ---
 
-## Configuration
+## Deploy (live link)
 
-Copy `.env.example` to `.env` (project root or `backend/`). Everything is optional.
+Backend on [Render](https://render.com), frontend on [Vercel](https://vercel.com), both free; no code changes.
 
-| Variable | Default | Purpose |
-|---|---|---|
-| `NOVA_LOG_LEVEL` | `INFO` | Logging level |
-| `NOVA_DATABASE_URL` | `sqlite:///backend/data/nova.db` | SQLite location |
-| `NOVA_OPEN_BROWSER_ON_SERVER` | `true` | Open allow-listed sites with the OS browser (otherwise the tab opens them) |
-| `NOVA_AUTO_TRAIN_IF_MISSING` | `true` | Train a model on start-up if none exists |
-| `NOVA_WEATHER_ENABLED` | `true` | Enable Open-Meteo weather (set a city in Settings) |
-| `NOVA_LLM_PROVIDER` | *(empty)* | `anthropic`, `ollama`, or empty for offline only |
-| `NOVA_LLM_MODEL` | provider default | e.g. `claude-opus-5-5` or `llama3.2` |
-| `ANTHROPIC_API_KEY` | — | Only for the Anthropic provider; read by the backend only |
-| `NOVA_OLLAMA_BASE_URL` | `http://localhost:11434` | Ollama server |
+**Backend — Render → New → Web Service**
 
-API keys are never sent to the frontend, and the log formatter redacts anything that looks like a key or bearer
-token. User preferences (thresholds, voice, theme, …) are edited in the **Settings** page and stored in SQLite.
+| Setting | Value |
+|---|---|
+| Root directory | `backend` |
+| Build command | `pip install -r requirements.txt && python ml/train_model.py` |
+| Start command | `uvicorn app.main:app --host 0.0.0.0 --port $PORT` |
+| Env `PYTHON_VERSION` | `3.11.5` |
+| Env `NOVA_OPEN_BROWSER_ON_SERVER` | `false` |
+| Env `TZ` | your timezone, e.g. `Asia/Kolkata` (servers run on UTC) |
+| Env `NOVA_CORS_ORIGINS` | your Vercel URL, e.g. `https://nova.vercel.app` |
 
-**About the Anthropic provider:** it uses the official SDK with low effort and a short answer length (replies are
-spoken), and enables the API's server-side refusal fallback. It has not been exercised against the live API in this
-repository's tests (no key was available); the offline path and error handling are tested.
+Check `https://<service>.onrender.com/api/health` shows `"status": "ok"`.
+
+**Frontend — Vercel → Add New → Project**
+
+| Setting | Value |
+|---|---|
+| Root directory | `frontend` |
+| Framework preset | Vite |
+| Env `VITE_API_URL` | `https://<service>.onrender.com` |
+
+`frontend/vercel.json` makes page refreshes work. Free-tier notes: Render sleeps after ~15 min (first request
+then takes ~1 min), its disk resets on restart (reminders are lost), and there are no user accounts — everyone
+with the link shares one Nova.
 
 ---
 
 ## API
 
-Interactive documentation: **http://127.0.0.1:8000/docs** (OpenAPI).
+Interactive docs at `http://127.0.0.1:8000/docs`.
 
-| Method & path | Purpose |
+| Endpoint | Purpose |
 |---|---|
-| `GET /api/health` | Backend, database, model and service status |
-| `POST /api/assistant/process` | Run the full pipeline on `{text, source, session_id}` |
-| `POST /api/assistant/reset-context` | Forget pending questions / last action for a session |
-| `GET /api/assistant/capabilities` | Capabilities, availability, examples, website allow-list |
-| `GET /api/history` · `DELETE /api/history` | Paginated history (`intent`, `decision`, `search` filters) · clear |
-| `GET /api/analytics` · `DELETE /api/analytics` | Usage statistics · clear |
-| `GET/POST /api/timers` · `DELETE /api/timers/{id}` | List/create · cancel timers |
-| `GET/POST /api/reminders` · `PATCH /api/reminders/{id}/complete` · `DELETE /api/reminders/{id}` · `DELETE /api/reminders` | Reminders CRUD |
-| `GET /api/focus` · `POST /api/focus/start` · `POST /api/focus/stop` | Focus mode |
-| `GET /api/notifications` · `POST /api/notifications/{id}/read` · `POST /api/notifications/read-all` | Completion events |
-| `GET /api/settings` · `PUT /api/settings` · `POST /api/settings/reset` | Preferences (validated) |
-| `GET /api/model` · `POST /api/model/predict` · `POST /api/model/reload` | Model info + report · raw prediction · hot reload |
+| `GET /api/health` | backend + model status |
+| `POST /api/assistant/process` | `{text, source, session_id}` → full decision + trace |
+| `POST /api/assistant/reset-context` | forget pending questions for a session |
+| `GET/POST /api/timers`, `DELETE /api/timers/{id}` | timers |
+| `GET/POST /api/reminders`, `PATCH …/{id}/complete`, `DELETE …/{id}` | reminders |
+| `GET /api/notifications`, `POST /api/notifications/{id}/read` | timer/reminder alerts for the UI |
+| `GET/PUT /api/settings`, `POST /api/settings/reset` | preferences |
 
-Example:
-
-```http
-POST /api/assistant/process
-{ "text": "Could you start a countdown for five minutes?", "source": "text", "session_id": "demo" }
-```
-
-```json
-{
-  "intent": "SET_TIMER",
-  "confidence": 0.9934,
-  "top_intents": [{"intent": "SET_TIMER", "confidence": 0.9934}, {"intent": "FOCUS_MODE", "confidence": 0.0041}, ...],
-  "explanation": [{"feature": "countdown", "kind": "word", "weight": 0.56}, ...],
-  "entities": {"operation": "create", "duration_seconds": 300, "duration_text": "5 minutes"},
-  "decision": "EXECUTE",
-  "decision_reason": "Confidence 99.3% ≥ 75% and all required parameters are present → execute SET_TIMER.",
-  "action": "SET_TIMER",
-  "response": "Your timer is set for 5 minutes.",
-  "success": true,
-  "pipeline": [{"stage": "normalize", "title": "Text normalisation", "detail": "...", "ms": 0.1}, ...]
-}
-```
-
----
-
-## Testing
-
-```powershell
-cd backend
-.\.venv\Scripts\python.exe -m pytest
-```
-
-108 tests, all passing, run against a temporary database with network access and the real browser disabled:
-
-- **ML** (`test_ml.py`): model loads with all intents, predictions on unseen sentences, probability distribution
-  sums to 1, explanations, gibberish → low confidence/UNKNOWN, unseen-file accuracy ≥ 85 %, missing model handled.
-- **Entities** (`test_entities.py`): durations, reminder message + date/time (12 phrasings), calculator operands and
-  results, rejection of code in the evaluator, website matching incl. typos, weather/focus parameters.
-- **Actions** (`test_actions.py`): time, date, calculator, timer create/status/cancel/complete, reminder persistence
-  and notifications, focus mode, website allow-list, weather not fabricated, knowledge base, crash containment.
-- **API** (`test_api.py`): health, process endpoint, invalid input, missing entities → clarification, context
-  follow-ups, low confidence, confirmation flow, action failure, CRUD endpoints, settings validation, history/analytics.
-- **Core** (`test_core.py`): context expiry and isolation, secret redaction in logs.
-
-The frontend is type-checked as part of `npm run build`.
+**Database (SQLite):** `timers`, `reminders`, `notifications`, `settings`. Conversations are not stored.
 
 ---
 
 ## Project structure
 
 ```
-Nova/
-├── backend/
-│   ├── app/
-│   │   ├── api/            # FastAPI routers (assistant, tasks, data)
-│   │   ├── actions/        # BaseAction, handlers, ActionRegistry
-│   │   ├── context/        # conversation context manager
-│   │   ├── core/           # config, logging (redaction), time helpers, service container
-│   │   ├── database/       # engine / sessions
-│   │   ├── engine/         # decision pipeline + response templates
-│   │   ├── ml/             # model definition, trainer, runtime classifier
-│   │   ├── models/         # SQLAlchemy ORM tables
-│   │   ├── nlp/            # preprocessing, numbers, durations, date/time, math, websites, entities
-│   │   ├── schemas/        # Pydantic request/response models
-│   │   ├── services/       # timers, reminders, focus, notifications, settings, history, analytics,
-│   │   │                   # scheduler, weather, knowledge base, llm/ providers
-│   │   └── main.py
-│   ├── datasets/           # intents.json, intents_unseen.json, knowledge_base.json
-│   ├── ml/train_model.py   # training CLI
-│   ├── artifacts/          # trained model + training_report.json
-│   ├── tests/
-│   └── requirements.txt
-├── frontend/
-│   └── src/ (components, pages, layouts, hooks, services, context, types, utils, styles)
-├── docs/                   # ARCHITECTURE.md, PROGRESS.md, screenshots/
-├── scripts/                # setup.ps1, start.ps1
-├── .env.example
-└── README.md
+backend/
+  app/
+    api/        routes_assistant.py, routes_tasks.py, routes_settings.py
+    engine/     pipeline.py (the decision logic), responses.py
+    ml/         model.py, trainer.py, intent_classifier.py
+    nlp/        preprocessing, numbers, duration, datetime_parser, math_expression, websites, entities
+    actions/    base.py, registry.py, basic.py, tasks.py, external.py
+    context/    manager.py (short-term memory)
+    services/   timers, reminders, notifications, settings, scheduler, knowledge_base
+    models/     SQLAlchemy tables      schemas/  Pydantic request/response models
+    core/       config, logging (hides secrets), time helpers, container
+    main.py
+  datasets/     intents.json, intents_unseen.json, knowledge_base.json
+  ml/train_model.py
+  tests/
+frontend/src/
+  pages/        HomePage.tsx, SettingsPage.tsx
+  components/   assistant/, inspector/, tasks/, layout/, ui/
+  hooks/        useWakeWord, useSpeechRecognition, useSpeechSynthesis
+  context/      AssistantContext (conversation + voice), SettingsContext, SystemContext
+scripts/        setup.ps1, start.ps1
 ```
 
 ---
 
-## Screenshots
+## Viva questions you should expect
 
-| | |
-|---|---|
-| ![Assistant with inspector](docs/screenshots/assistant-inspector.png) **Assistant + AI Decision Inspector** | ![History](docs/screenshots/history.png) **History with per-row inspection** |
-| ![Analytics](docs/screenshots/analytics.png) **Usage analytics & model evaluation** | ![Light theme](docs/screenshots/dashboard-light.png) **Light theme** |
-| ![Notification](docs/screenshots/notification.png) **Timer completion from the backend scheduler** | ![Dashboard](docs/screenshots/dashboard.png) **Dashboard with live tasks** |
-
----
+- **Why your own classifier instead of ChatGPT?** Explainable (you can see which words decided), fast (~10 ms),
+  free, works offline, and it never acts on a guess thanks to the confidence thresholds.
+- **Why TF-IDF + Logistic Regression?** Small dataset → a linear model generalises well, trains in seconds, and
+  outputs calibrated-enough probabilities. Character n-grams handle typos and speech errors.
+- **How did you choose C / the thresholds?** C by 5-fold grid search. The thresholds (75 % / 45 %) are the
+  starting values from the project brief, checked against the model's confidence on test sentences (correct
+  predictions are mostly above 90 %); they're adjustable in Settings to experiment live.
+- **What does the model *not* do?** It only picks the intent. Numbers, dates and website names are extracted
+  by deterministic parsers, so they are exact and testable.
+- **How is it safe?** No shell commands, no `eval` (calculator uses Python's `ast` with a whitelist), websites
+  only from an allow-list, all inputs validated with Pydantic.
+- **How does the wake word work?** The browser streams speech to text continuously; the frontend only acts on
+  text containing "Nova" and ignores audio while Nova is speaking, so it doesn't trigger itself.
+- **Weak points?** Small dataset; rule-based dates don't cover every phrasing; browser speech recognition needs
+  Chrome/Edge (and Google's online service in Chrome); single user, no login.
 
 ## Limitations
 
-- **Speech recognition** uses the browser's Web Speech API: Chrome and Edge only, and in Chrome the audio is
-  processed by Google's online service. Firefox users can type. A local engine (e.g. faster-whisper) can be added
-  behind `useSpeechRecognition`.
-- **Small dataset.** About 50 sentences per intent is enough for ~90 % accuracy, but unusual phrasings can still be
-  misclassified; the confidence thresholds and confirmation step are there to contain that.
-- **Rule-based entities.** The date/time parser covers common English phrasings (absolute, relative, weekdays,
-  months, "half past", "tonight"…) but not everything ("the second Tuesday of next month").
-- **One timezone.** Times are stored as local time of the machine; backend and browser are assumed to be on the
-  same computer.
-- **Single user**, no authentication — it is designed to run locally.
-- **Weather** needs internet; questions beyond the offline knowledge base need an LLM provider.
-- Opening a website from a voice command depends on `NOVA_OPEN_BROWSER_ON_SERVER=true`; browsers block pop-ups
-  that aren't triggered by a click, so with it disabled Nova shows a link instead.
-
-## Future improvements
-
-- Local speech-to-text (faster-whisper) and neural TTS (Piper) for a fully offline voice loop.
-- Transformer sentence embeddings (e.g. a small MiniLM) as an alternative classifier, compared in the analytics page.
-- Active learning: let the user correct misclassified commands from History and retrain with one click.
-- Learned slot filling (CRF / token classification) for richer entities.
-- Optional wake-word detection, recurring reminders, calendar integration, multi-language support.
+- Voice input works in Chrome and Edge only; Chrome sends audio to Google's speech service.
+- The wake word only works while the Nova tab is open.
+- Times use the server's clock (set `TZ` when deployed).
+- Single user, no authentication.

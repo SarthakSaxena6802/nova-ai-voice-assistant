@@ -5,8 +5,6 @@ export const INTENT_LABELS: Record<string, string> = {
   CALCULATE: "Calculate",
   SET_TIMER: "Timer",
   CREATE_REMINDER: "Reminder",
-  FOCUS_MODE: "Focus mode",
-  WEATHER_QUERY: "Weather",
   OPEN_WEBSITE: "Open website",
   ASK_QUESTION: "Question",
   UNKNOWN: "Unknown",
@@ -60,14 +58,6 @@ export function formatDateTime(iso: string): string {
   if (d.toDateString() === today.toDateString()) return `Today, ${time}`;
   if (d.toDateString() === tomorrow.toDateString()) return `Tomorrow, ${time}`;
   return `${d.toLocaleDateString([], { weekday: "short", month: "short", day: "numeric" })}, ${time}`;
-}
-
-export function timeAgo(iso: string): string {
-  const diff = (Date.now() - parseLocal(iso).getTime()) / 1000;
-  if (diff < 45) return "just now";
-  if (diff < 3600) return `${Math.round(diff / 60)} min ago`;
-  if (diff < 86400) return `${Math.round(diff / 3600)} h ago`;
-  return parseLocal(iso).toLocaleDateString([], { month: "short", day: "numeric" });
 }
 
 export function greetingFor(date = new Date()): string {

@@ -75,30 +75,6 @@
    "intent": "CREATE_REMINDER"
   },
   {
-   "text": "start a focus block of forty minutes",
-   "intent": "FOCUS_MODE"
-  },
-  {
-   "text": "i really need to concentrate now",
-   "intent": "FOCUS_MODE"
-  },
-  {
-   "text": "end my focus mode",
-   "intent": "FOCUS_MODE"
-  },
-  {
-   "text": "is it going to be sunny tomorrow",
-   "intent": "WEATHER_QUERY"
-  },
-  {
-   "text": "what is the temperature like in chennai",
-   "intent": "WEATHER_QUERY"
-  },
-  {
-   "text": "will i need an umbrella tomorrow",
-   "intent": "WEATHER_QUERY"
-  },
-  {
    "text": "could you open youtube for me",
    "intent": "OPEN_WEBSITE"
   },

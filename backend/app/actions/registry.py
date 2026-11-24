@@ -6,8 +6,8 @@ from typing import Any
 
 from app.actions.base import ActionContext, ActionResult, BaseAction
 from app.actions.basic import CalculatorAction, DateAction, GreetingAction, TimeAction
-from app.actions.external import ConversationAction, WeatherAction, WebsiteAction
-from app.actions.tasks import FocusAction, ReminderAction, TimerAction
+from app.actions.external import ConversationAction, WebsiteAction
+from app.actions.tasks import ReminderAction, TimerAction
 from app.core.logging import get_logger
 
 log = get_logger("actions.registry")
@@ -52,7 +52,7 @@ def build_default_registry() -> ActionRegistry:
     registry = ActionRegistry()
     for action in (
         GreetingAction(), TimeAction(), DateAction(), CalculatorAction(), TimerAction(), ReminderAction(),
-        FocusAction(), WebsiteAction(), WeatherAction(), ConversationAction(),
+        WebsiteAction(), ConversationAction(),
     ):
         registry.register(action)
     return registry

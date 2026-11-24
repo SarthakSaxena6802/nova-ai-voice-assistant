@@ -44,15 +44,14 @@ from app.schemas.assistant import (
     Thresholds,
 )
 from app.schemas.settings import NovaSettings
-from app.services import focus_service, history_service, reminder_service, settings_service, timer_service
+from app.services import reminder_service, settings_service, timer_service
 from app.services.knowledge_base import KnowledgeBase
-from app.services.llm.base import LLMProvider
 
 log = get_logger("engine")
 
 _FOLLOW_UP_MODIFY = re.compile(
     r"^(?:(?:actually|no|wait|oh|sorry|hmm|okay|ok|please)\s+)*"
-    r"(?:(?:make|change|set|update|extend|move|switch)\s+(?:it|that|this|the timer|the reminder|the session|focus)\s*(?:to|for|until)?\s+"
+    r"(?:(?:make|change|set|update|extend|move|switch)\s+(?:it|that|this|the timer|the reminder)\s*(?:to|for|until)?\s+"
     r"|(?=\d))(?P<rest>.+)$"
 )
 _FOLLOW_UP_CANCEL = re.compile(r"^(?:(?:actually|no|wait|oh|please)\s+)*(?:cancel|stop|delete|remove|undo)\s+(?:it|that|this)$")
@@ -92,14 +91,12 @@ class AssistantPipeline:
         registry: ActionRegistry,
         contexts: ContextManager,
         knowledge_base: KnowledgeBase | None = None,
-        llm: LLMProvider | None = None,
         open_browser_on_server: bool = False,
     ) -> None:
         self.classifier = classifier
         self.registry = registry
         self.contexts = contexts
         self.knowledge_base = knowledge_base
-        self.llm = llm
         self.open_browser_on_server = open_browser_on_server
 
     # ================================================================== entry point
@@ -161,7 +158,6 @@ class AssistantPipeline:
             pipeline=trace.steps,
             processing_ms=elapsed,
         )
-        response.id = history_service.record(db, response)
         return response
 
     # ======================================================== decision from classifier
@@ -323,21 +319,6 @@ class AssistantPipeline:
             return done("SET_TIMER", f"Done — your timer is now {humanize_seconds(seconds)}.", True,
                         {"operation": "modify", "duration_seconds": seconds}, {"timer_id": timer.id})
 
-        if last.intent == "FOCUS_MODE" and d.get("focus_id"):
-            session = focus_service.active_session(db)
-            if session is None:
-                return done("FOCUS_MODE", "Focus mode isn't running anymore.", False, {})
-            if cancel:
-                focus_service.stop_session(db)
-                return done("FOCUS_MODE", "Okay, focus mode is off.", True, {"operation": "stop"})
-            seconds = self._duration_from_follow_up(modify.group("rest"), d.get("duration_seconds", 1500))
-            if not seconds:
-                return None
-            focus_service.update_duration(db, session, seconds)
-            self.contexts.set_last_action(ctx, "FOCUS_MODE", {"focus_id": session.id, "duration_seconds": seconds})
-            return done("FOCUS_MODE", f"Done — your focus session is now {humanize_seconds(seconds)}.", True,
-                        {"operation": "modify", "duration_seconds": seconds})
-
         if last.intent == "CREATE_REMINDER" and d.get("reminder_id"):
             reminder = reminder_service.get_reminder(db, d["reminder_id"])
             if reminder is None:
@@ -373,7 +354,7 @@ class AssistantPipeline:
     # ================================================================ helpers
     def _run(self, db, ctx: ConversationContext, intent: str, entities: dict[str, Any], text: str, prefs, trace: Trace) -> ActionResult:
         actx = ActionContext(
-            db=db, prefs=prefs, now=now(), text=text, knowledge_base=self.knowledge_base, llm=self.llm,
+            db=db, prefs=prefs, now=now(), text=text, knowledge_base=self.knowledge_base,
             open_browser_on_server=self.open_browser_on_server, last_action=ctx.last_action.data if ctx.last_action else None,
         )
         result = self.registry.execute(intent, entities, actx)

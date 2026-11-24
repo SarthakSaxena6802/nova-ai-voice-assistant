@@ -1,7 +1,6 @@
-import { AlarmClock, Bell, Check, Play, Square, Target, Trash2, X } from "lucide-react";
+import { AlarmClock, Bell, Check, Trash2, X } from "lucide-react";
 import { useState } from "react";
 import { useAssistant } from "../../context/AssistantContext";
-import { useSettings } from "../../context/SettingsContext";
 import { useNow } from "../../hooks/useTimers";
 import { api } from "../../services/api";
 import { formatClock, formatDateTime, formatDuration, parseLocal } from "../../utils/format";
@@ -94,66 +93,6 @@ export function RemindersCard({ limit = 5 }: { limit?: number }) {
           {reminders.length > limit && <li className="pt-2 text-xs text-muted">+{reminders.length - limit} more</li>}
         </ul>
       )}
-    </Card>
-  );
-}
-
-export function FocusCard() {
-  const { focus } = useAssistant();
-  const { settings } = useSettings();
-  const now = useNow(1000);
-  const { busy, run } = useAction();
-  const active = focus?.active;
-  const left = active ? remaining(active.ends_at, now) : 0;
-  const progress = active ? 1 - left / active.duration_seconds : 0;
-  const R = 34;
-  const C = 2 * Math.PI * R;
-
-  return (
-    <Card title="Focus session" icon={Target}>
-      <div className="flex items-center gap-4">
-        <svg width="84" height="84" viewBox="0 0 84 84" className="shrink-0 -rotate-90" aria-hidden>
-          <circle cx="42" cy="42" r={R} fill="none" stroke="rgb(var(--surface-3))" strokeWidth="6" />
-          <circle
-            cx="42"
-            cy="42"
-            r={R}
-            fill="none"
-            stroke="rgb(var(--accent))"
-            strokeWidth="6"
-            strokeLinecap="round"
-            strokeDasharray={C}
-            strokeDashoffset={C * (1 - progress)}
-            style={{ transition: "stroke-dashoffset 1s linear" }}
-          />
-        </svg>
-        <div className="min-w-0 flex-1">
-          {active ? (
-            <>
-              <div className="text-2xl font-semibold tabular-nums">{formatClock(left)}</div>
-              <div className="text-xs text-muted">of {formatDuration(active.duration_seconds)} · stay focused</div>
-            </>
-          ) : (
-            <>
-              <div className="text-sm font-medium text-ink">Focus mode is off</div>
-              <div className="text-xs text-muted">
-                {focus ? `${focus.completed_today} completed today · ${focus.total_focus_minutes} min total` : "—"}
-              </div>
-            </>
-          )}
-          <div className="mt-2.5">
-            {active ? (
-              <button className="btn-outline px-3 py-1.5 text-xs" disabled={busy} onClick={() => run(() => api.stopFocus())}>
-                <Square size={13} /> Stop session
-              </button>
-            ) : (
-              <button className="btn-outline px-3 py-1.5 text-xs" disabled={busy} onClick={() => run(() => api.startFocus(settings.focus_default_minutes))}>
-                <Play size={13} /> Start {settings.focus_default_minutes} min
-              </button>
-            )}
-          </div>
-        </div>
-      </div>
     </Card>
   );
 }

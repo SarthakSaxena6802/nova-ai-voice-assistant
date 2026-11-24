@@ -134,22 +134,6 @@ def _target_words(text: str) -> str:
     return m.group(1).replace("reminder", "").strip() if m else ""
 
 
-# ------------------------------------------------------------------------------ focus
-def extract_focus(text: str, now: datetime) -> EntityResult:
-    res = EntityResult()
-    if _has(r"\b(stop|end|disable|turn off|exit|quit|done focusing|finish|pause|cancel)\b", text):
-        res.entities["operation"] = "stop"
-    elif _has(r"\b(how long|time left|remaining|status|am i in)\b", text):
-        res.entities["operation"] = "status"
-    else:
-        res.entities["operation"] = "start"
-        dur = extract_duration(text)
-        if dur:
-            res.entities["duration_seconds"] = dur.seconds
-            res.entities["duration_text"] = humanize_seconds(dur.seconds)
-    return res
-
-
 # --------------------------------------------------------------------------- calculate
 def extract_calculation(text: str, now: datetime) -> EntityResult:
     res = EntityResult()
@@ -169,21 +153,6 @@ def extract_website(text: str, now: datetime) -> EntityResult:
         res.entities.update(website=site.name, website_key=site.key, url=site.url)
     else:
         res.missing.append("website")
-    return res
-
-
-# ------------------------------------------------------------------------------ weather
-_WEATHER_STOP = r"(?:today|tomorrow|right now|now|this week|this weekend|tonight|please|currently)"
-
-
-def extract_weather(text: str, now: datetime) -> EntityResult:
-    res = EntityResult()
-    m = re.search(r"\b(?:in|for|at)\s+([a-z][a-z ]{1,40}?)(?:\s+" + _WEATHER_STOP + r")*\s*$", text)
-    if m:
-        city = m.group(1).strip()
-        if city not in ("the morning", "the evening", "the afternoon", "general"):
-            res.entities["city"] = city.title()
-    res.entities["day"] = "tomorrow" if "tomorrow" in text else "today"
     return res
 
 
@@ -222,10 +191,8 @@ def _no_entities(text: str, now: datetime) -> EntityResult:
 EXTRACTORS: dict[str, Callable[[str, datetime], EntityResult]] = {
     "SET_TIMER": extract_timer,
     "CREATE_REMINDER": extract_reminder,
-    "FOCUS_MODE": extract_focus,
     "CALCULATE": extract_calculation,
     "OPEN_WEBSITE": extract_website,
-    "WEATHER_QUERY": extract_weather,
     "GET_DATE": extract_date,
     "ASK_QUESTION": extract_question,
 }

@@ -12,7 +12,7 @@ from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
-from app.api import routes_assistant, routes_data, routes_tasks
+from app.api import routes_assistant, routes_settings, routes_tasks
 from app.core.config import APP_VERSION, get_settings
 from app.core.container import build_container
 from app.core.logging import get_logger, setup_logging
@@ -62,7 +62,7 @@ async def log_requests(request: Request, call_next):
     start = time.perf_counter()
     response = await call_next(request)
     path = request.url.path
-    if not (request.method == "GET" and path in ("/api/notifications", "/api/timers", "/api/focus", "/api/health")):
+    if not (request.method == "GET" and path in ("/api/notifications", "/api/timers", "/api/reminders", "/api/health")):
         log.info("%s %s → %s (%.0f ms)", request.method, path, response.status_code, (time.perf_counter() - start) * 1000)
     return response
 
@@ -75,7 +75,7 @@ async def unhandled(request: Request, exc: Exception) -> JSONResponse:
 
 app.include_router(routes_assistant.router)
 app.include_router(routes_tasks.router)
-app.include_router(routes_data.router)
+app.include_router(routes_settings.router)
 
 
 @app.get("/", include_in_schema=False)

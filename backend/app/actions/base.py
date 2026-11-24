@@ -19,7 +19,6 @@ from app.schemas.settings import NovaSettings
 
 if TYPE_CHECKING:
     from app.services.knowledge_base import KnowledgeBase
-    from app.services.llm.base import LLMProvider
 
 
 class ActionResult(BaseModel):
@@ -39,7 +38,6 @@ class ActionContext:
     now: datetime
     text: str = ""
     knowledge_base: "KnowledgeBase | None" = None
-    llm: "LLMProvider | None" = None
     open_browser_on_server: bool = False
     last_action: dict[str, Any] | None = None
     extras: dict[str, Any] = field(default_factory=dict)
@@ -50,13 +48,10 @@ class BaseAction(ABC):
     name: str = ""
     description: str = ""
     examples: list[str] = []
-    requires: list[str] = []  # e.g. ["internet"], ["llm (optional)"]
 
     @abstractmethod
     def execute(self, entities: dict[str, Any], ctx: ActionContext) -> ActionResult: ...
 
-    def available(self, ctx_info: dict[str, Any]) -> tuple[bool, str]:
-        return True, "Ready"
 
     # helpers
     def ok(self, message: str, data: dict[str, Any] | None = None, context: dict[str, Any] | None = None) -> ActionResult:

@@ -71,29 +71,6 @@ class ReminderCreate(BaseModel):
         return v
 
 
-class FocusStart(BaseModel):
-    duration_minutes: int | None = Field(None, ge=1, le=240)
-
-
-class FocusSessionOut(BaseModel):
-    model_config = ConfigDict(from_attributes=True)
-
-    id: int
-    duration_seconds: int
-    started_at: datetime
-    ends_at: datetime
-    status: str
-    ended_at: datetime | None = None
-    remaining_seconds: int = 0
-
-
-class FocusStatus(BaseModel):
-    active: FocusSessionOut | None
-    completed_sessions: int
-    completed_today: int
-    total_focus_minutes: int
-
-
 class NotificationOut(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 

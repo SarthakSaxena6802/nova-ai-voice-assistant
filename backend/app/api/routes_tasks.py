@@ -1,4 +1,4 @@
-"""Timers, reminders, focus sessions and notifications."""
+"""Timers, reminders and notifications."""
 from __future__ import annotations
 
 from typing import Literal
@@ -7,19 +7,14 @@ from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 
 from app.database.session import get_db
-from app.schemas.settings import NovaSettings
 from app.schemas.tasks import (
-    FocusSessionOut,
-    FocusStart,
-    FocusStatus,
     NotificationOut,
     ReminderCreate,
     ReminderOut,
     TimerCreate,
     TimerOut,
 )
-from app.services import focus_service, notification_service, reminder_service, settings_service, timer_service
-from app.services.focus_service import FocusError
+from app.services import notification_service, reminder_service, timer_service
 from app.services.reminder_service import ReminderError
 from app.services.timer_service import TimerError
 
@@ -87,30 +82,6 @@ def clear_reminders(db: Session = Depends(get_db)) -> dict[str, int]:
     return {"deleted": reminder_service.clear_reminders(db)}
 
 
-# -------------------------------------------------------------------- focus
-@router.get("/focus", response_model=FocusStatus, tags=["focus"])
-def focus_status(db: Session = Depends(get_db)) -> FocusStatus:
-    return focus_service.status(db)
-
-
-@router.post("/focus/start", response_model=FocusSessionOut, status_code=201, tags=["focus"])
-def focus_start(body: FocusStart | None = None, db: Session = Depends(get_db)) -> FocusSessionOut:
-    prefs: NovaSettings = settings_service.get_settings(db)
-    minutes = (body.duration_minutes if body and body.duration_minutes else None) or prefs.focus_default_minutes
-    try:
-        return focus_service.to_out(focus_service.start_session(db, minutes * 60))  # type: ignore[return-value]
-    except FocusError as exc:
-        raise HTTPException(status_code=409, detail=str(exc)) from exc
-
-
-@router.post("/focus/stop", response_model=FocusSessionOut, tags=["focus"])
-def focus_stop(db: Session = Depends(get_db)) -> FocusSessionOut:
-    session = focus_service.stop_session(db)
-    if session is None:
-        raise HTTPException(status_code=409, detail="No focus session is running")
-    return focus_service.to_out(session)  # type: ignore[return-value]
-
-
 # ------------------------------------------------------------ notifications
 @router.get("/notifications", response_model=list[NotificationOut], tags=["notifications"])
 def notifications(unread_only: bool = True, limit: int = Query(50, ge=1, le=200), db: Session = Depends(get_db)) -> list[NotificationOut]:
@@ -120,8 +91,3 @@ def notifications(unread_only: bool = True, limit: int = Query(50, ge=1, le=200)
 @router.post("/notifications/{notification_id}/read", tags=["notifications"])
 def mark_read(notification_id: int, db: Session = Depends(get_db)) -> dict[str, int]:
     return {"updated": notification_service.mark_read(db, notification_id)}
-
-
-@router.post("/notifications/read-all", tags=["notifications"])
-def mark_all_read(db: Session = Depends(get_db)) -> dict[str, int]:
-    return {"updated": notification_service.mark_read(db)}

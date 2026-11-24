@@ -1,20 +1,17 @@
 """Application configuration loaded from environment variables / .env files.
 
-Secrets (API keys) live only here on the backend and are never sent to the frontend.
 """
 from __future__ import annotations
 
 from functools import lru_cache
 from pathlib import Path
 
-from pydantic import AliasChoices, Field, SecretStr
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 BACKEND_DIR = Path(__file__).resolve().parents[2]
 PROJECT_DIR = BACKEND_DIR.parent
 
 APP_VERSION = "1.0.0"
-
 
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
@@ -47,24 +44,9 @@ class Settings(BaseSettings):
     open_browser_on_server: bool = True
     scheduler_interval_seconds: float = 1.0
 
-    # --- Optional integrations -------------------------------------------------
-    weather_enabled: bool = True
-    weather_timeout_seconds: float = 6.0
-
-    # Conversational AI provider: "" (disabled), "anthropic" or "ollama"
-    llm_provider: str = ""
-    llm_model: str = ""
-    llm_timeout_seconds: float = 30.0
-    ollama_base_url: str = "http://localhost:11434"
-    anthropic_api_key: SecretStr | None = Field(
-        default=None,
-        validation_alias=AliasChoices("ANTHROPIC_API_KEY", "NOVA_ANTHROPIC_API_KEY"),
-    )
-
     @property
     def cors_origin_list(self) -> list[str]:
         return [o.strip() for o in self.cors_origins.split(",") if o.strip()]
-
 
 @lru_cache
 def get_settings() -> Settings:

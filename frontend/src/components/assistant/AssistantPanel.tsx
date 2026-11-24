@@ -7,7 +7,10 @@ import { NovaOrb } from "./NovaOrb";
 
 /** Orb + live transcript + text input + mic/send/clear controls. */
 export function AssistantComposer({ autoFocus = false }: { autoFocus?: boolean }) {
-  const { send, busy, recognition, toggleListening, synthesis, clear, messages, draft, setDraft } = useAssistant();
+  const { send, busy, recognition, wake, toggleListening, synthesis, clear, messages, draft, setDraft } = useAssistant();
+  const listening = recognition.listening || wake.state === "awake";
+  const transcript = recognition.transcript || wake.heard;
+  const micError = recognition.error ?? wake.error;
   const { online } = useSystem();
   const { settings } = useSettings();
   const inputRef = useRef<HTMLInputElement>(null);
@@ -30,16 +33,16 @@ export function AssistantComposer({ autoFocus = false }: { autoFocus?: boolean }
 
   return (
     <div className="flex flex-col gap-3">
-      {(recognition.listening || recognition.transcript) && (
+      {(listening || transcript) && (
         <div className="rounded-xl border border-accent/30 bg-accent/5 px-4 py-2.5 text-sm">
           <span className="mr-2 text-[11px] font-semibold uppercase tracking-wider text-accent">
-            {recognition.listening ? "Hearing" : "Heard"}
+            {listening ? "Hearing" : "Heard"}
           </span>
-          <span className="text-ink">{recognition.transcript || "…"}</span>
+          <span className="text-ink">{transcript || "…"}</span>
         </div>
       )}
-      {recognition.error && (
-        <div className="rounded-xl border border-warn/30 bg-warn/10 px-4 py-2.5 text-sm text-ink">{recognition.error}</div>
+      {micError && (
+        <div className="rounded-xl border border-warn/30 bg-warn/10 px-4 py-2.5 text-sm text-ink">{micError}</div>
       )}
       <form onSubmit={submit} className="flex items-center gap-2">
         <button
@@ -49,13 +52,15 @@ export function AssistantComposer({ autoFocus = false }: { autoFocus?: boolean }
           title={
             !recognition.supported
               ? "Voice input isn't supported in this browser (use Chrome or Edge)"
-              : recognition.listening
-                ? "Stop listening"
-                : "Speak to Nova"
+              : wake.state !== "off"
+                ? "Wake Nova (or just say \"Nova\")"
+                : recognition.listening
+                  ? "Stop listening"
+                  : "Speak to Nova"
           }
-          aria-label={recognition.listening ? "Stop listening" : "Start listening"}
+          aria-label={listening ? "Stop listening" : "Start listening"}
           className={`grid h-11 w-11 shrink-0 place-items-center rounded-xl border transition disabled:cursor-not-allowed disabled:opacity-40 ${
-            recognition.listening
+            listening
               ? "border-bad/50 bg-bad/15 text-bad"
               : "border-accent/40 bg-accent/10 text-accent hover:bg-accent/20"
           }`}
@@ -78,7 +83,9 @@ export function AssistantComposer({ autoFocus = false }: { autoFocus?: boolean }
       </form>
       <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-muted">
         <span>
-          {recognition.supported
+          {wake.state !== "off"
+            ? 'Say "Nova" followed by a command, or type and press Enter.'
+            : recognition.supported
             ? "Click the mic and speak, or type and press Enter."
             : "Voice input needs Chrome or Edge — typing works everywhere."}
         </span>

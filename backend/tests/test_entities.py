@@ -150,9 +150,3 @@ def test_website_not_in_allowlist():
     assert r.missing == ["website"]
 
 
-def test_weather_and_focus_entities():
-    assert ents("WEATHER_QUERY", "what's the weather in new york today").entities["city"] == "New York"
-    assert ents("WEATHER_QUERY", "will it rain tomorrow").entities["day"] == "tomorrow"
-    f = ents("FOCUS_MODE", "start a 50 minute focus session").entities
-    assert f["operation"] == "start" and f["duration_seconds"] == 3000
-    assert ents("FOCUS_MODE", "stop focus mode").entities["operation"] == "stop"

@@ -23,7 +23,7 @@ export function Header() {
   const now = useNow(30000);
   const { settings } = useSettings();
   const { online, health, checked } = useSystem();
-  const { recognition, synthesis, status } = useAssistant();
+  const { recognition, synthesis, status, wake } = useAssistant();
   const name = settings.user_name ? `, ${settings.user_name}` : "";
   const date = new Date(now).toLocaleDateString([], { weekday: "long", month: "long", day: "numeric", year: "numeric" });
 
@@ -54,7 +54,7 @@ export function Header() {
           icon={recognition.supported ? <Mic size={12} /> : <MicOff size={12} />}
           title={recognition.supported ? "Speech recognition available" : "Speech recognition not supported – use Chrome or Edge"}
         >
-          {recognition.supported ? "Mic ready" : "No speech input"}
+          {wake.state !== "off" ? 'Say "Nova"' : recognition.supported ? "Mic ready" : "No speech input"}
         </Pill>
         <Pill
           ok={synthesis.supported && settings.voice_enabled}

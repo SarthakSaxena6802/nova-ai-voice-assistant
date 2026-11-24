@@ -1,4 +1,4 @@
-"""Background loop that completes timers / focus sessions and fires due reminders.
+"""Background loop that completes timers and fires due reminders.
 
 Runs inside the backend process, so timers keep working whether or not a browser tab is
 open. The UI learns about completions by polling ``/api/notifications``.
@@ -9,14 +9,14 @@ import asyncio
 
 from app.core.logging import get_logger
 from app.database.session import session_scope
-from app.services import focus_service, reminder_service, timer_service
+from app.services import reminder_service, timer_service
 
 log = get_logger("scheduler")
 
 
 def tick() -> int:
     with session_scope() as db:
-        return timer_service.complete_due(db) + reminder_service.notify_due(db) + focus_service.complete_due(db)
+        return timer_service.complete_due(db) + reminder_service.notify_due(db)
 
 
 async def run_scheduler(interval: float, stop: asyncio.Event) -> None:

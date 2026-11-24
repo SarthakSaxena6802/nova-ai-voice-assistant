@@ -7,7 +7,6 @@ Loaded once at backend start-up. Exposes:
 """
 from __future__ import annotations
 
-import json
 import time
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -137,24 +136,3 @@ class IntentClassifier:
         except Exception:  # explanation is best-effort, never break inference
             log.debug("Explanation failed", exc_info=True)
             return []
-
-    # -------------------------------------------------------------- reporting
-    def info(self) -> dict[str, Any]:
-        return {
-            "loaded": self.is_loaded,
-            "error": self.load_error,
-            "model_version": self.metadata.get("model_version"),
-            "model_name": self.metadata.get("model_name"),
-            "trained_at": self.metadata.get("trained_at"),
-            "classes": self.classes,
-            "dataset_size": self.metadata.get("dataset_size"),
-            "metrics": self.metadata.get("metrics", {}),
-            "hyperparameters": self.metadata.get("hyperparameters", {}),
-        }
-
-
-def load_report(path: Path) -> dict[str, Any] | None:
-    try:
-        return json.loads(Path(path).read_text(encoding="utf-8"))
-    except (FileNotFoundError, json.JSONDecodeError):
-        return None

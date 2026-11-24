@@ -1,15 +1,11 @@
-import { BarChart3, History, LayoutDashboard, MessageCircle, Settings, Sparkles } from "lucide-react";
+import { MessageCircle, Settings } from "lucide-react";
 import { NavLink } from "react-router-dom";
 import { useSettings } from "../../context/SettingsContext";
 import { useSystem } from "../../context/SystemContext";
 import { NovaMark } from "../assistant/NovaOrb";
 
 const NAV = [
-  { to: "/", label: "Dashboard", icon: LayoutDashboard, end: true },
-  { to: "/assistant", label: "Assistant", icon: MessageCircle },
-  { to: "/history", label: "History", icon: History },
-  { to: "/capabilities", label: "Capabilities", icon: Sparkles },
-  { to: "/analytics", label: "Analytics", icon: BarChart3 },
+  { to: "/", label: "Assistant", icon: MessageCircle, end: true },
   { to: "/settings", label: "Settings", icon: Settings },
 ];
 

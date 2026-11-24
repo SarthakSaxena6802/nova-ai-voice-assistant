@@ -36,12 +36,12 @@ interface Recognition {
 }
 type RecognitionCtor = new () => Recognition;
 
-function getCtor(): RecognitionCtor | null {
+export function getCtor(): RecognitionCtor | null {
   const w = window as unknown as { SpeechRecognition?: RecognitionCtor; webkitSpeechRecognition?: RecognitionCtor };
   return w.SpeechRecognition ?? w.webkitSpeechRecognition ?? null;
 }
 
-const ERROR_MESSAGES: Record<string, string> = {
+export const ERROR_MESSAGES: Record<string, string> = {
   "not-allowed": "Microphone access was blocked. Allow it in your browser's site settings.",
   "service-not-allowed": "Speech recognition is not allowed in this browser context.",
   "audio-capture": "No microphone was found. Check that one is connected.",

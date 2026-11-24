@@ -1,24 +1,22 @@
 {
-  "model_version": "20261120-194121",
+  "model_version": "20261124-204059",
   "model_name": "TF-IDF (word + char n-grams) + Logistic Regression",
-  "trained_at": "2026-11-20T19:41:21",
+  "trained_at": "2026-11-24T20:40:59",
   "dataset_path": "intents.json",
-  "dataset_size": 517,
+  "dataset_size": 449,
   "class_counts": {
     "ASK_QUESTION": 47,
     "CALCULATE": 52,
     "CREATE_REMINDER": 52,
-    "FOCUS_MODE": 45,
     "GET_DATE": 41,
     "GET_TIME": 42,
     "GREETING": 46,
     "OPEN_WEBSITE": 45,
     "SET_TIMER": 47,
-    "UNKNOWN": 57,
-    "WEATHER_QUERY": 43
+    "UNKNOWN": 77
   },
-  "train_size": 413,
-  "test_size": 104,
+  "train_size": 359,
+  "test_size": 90,
   "refit_on_full_dataset": true,
   "hyperparameters": {
     "C": 100.0,
@@ -30,7 +28,7 @@
       100.0,
       300.0
     ],
-    "cv_best_macro_f1": 0.9031,
+    "cv_best_macro_f1": 0.9194,
     "word_ngrams": [
       1,
       2
@@ -42,28 +40,28 @@
     "class_weight": "balanced"
   },
   "metrics": {
-    "accuracy": 0.9038,
-    "precision_macro": 0.9073,
-    "recall_macro": 0.9034,
-    "f1_macro": 0.903,
-    "test_mean_confidence": 0.8859,
-    "cv_accuracy_mean": 0.9129,
-    "cv_accuracy_std": 0.0255,
+    "accuracy": 0.9333,
+    "precision_macro": 0.9392,
+    "recall_macro": 0.939,
+    "f1_macro": 0.9386,
+    "test_mean_confidence": 0.8987,
+    "cv_accuracy_mean": 0.9199,
+    "cv_accuracy_std": 0.0214,
     "unseen_accuracy": 1.0
   },
   "test_metrics": {
-    "accuracy": 0.9038,
-    "precision_macro": 0.9073,
-    "recall_macro": 0.9034,
-    "f1_macro": 0.903,
-    "precision_weighted": 0.9103,
-    "recall_weighted": 0.9038,
-    "f1_weighted": 0.9049,
+    "accuracy": 0.9333,
+    "precision_macro": 0.9392,
+    "recall_macro": 0.939,
+    "f1_macro": 0.9386,
+    "precision_weighted": 0.9356,
+    "recall_weighted": 0.9333,
+    "f1_weighted": 0.9339,
     "per_class": {
       "ASK_QUESTION": {
-        "precision": 0.7778,
-        "recall": 0.7778,
-        "f1": 0.7778,
+        "precision": 0.8889,
+        "recall": 0.8889,
+        "f1": 0.8889,
         "support": 9
       },
       "CALCULATE": {
@@ -78,34 +76,28 @@
         "f1": 0.9524,
         "support": 11
       },
-      "FOCUS_MODE": {
-        "precision": 0.9,
-        "recall": 1.0,
-        "f1": 0.9474,
-        "support": 9
-      },
       "GET_DATE": {
-        "precision": 0.875,
-        "recall": 0.875,
-        "f1": 0.875,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
         "support": 8
       },
       "GET_TIME": {
         "precision": 1.0,
-        "recall": 0.875,
-        "f1": 0.9333,
+        "recall": 1.0,
+        "f1": 1.0,
         "support": 8
       },
       "GREETING": {
-        "precision": 0.7,
-        "recall": 0.7778,
-        "f1": 0.7368,
+        "precision": 0.8,
+        "recall": 0.8889,
+        "f1": 0.8421,
         "support": 9
       },
       "OPEN_WEBSITE": {
-        "precision": 1.0,
+        "precision": 0.8889,
         "recall": 0.8889,
-        "f1": 0.9412,
+        "f1": 0.8889,
         "support": 9
       },
       "SET_TIMER": {
@@ -115,16 +107,10 @@
         "support": 9
       },
       "UNKNOWN": {
-        "precision": 0.9091,
-        "recall": 0.8333,
-        "f1": 0.8696,
-        "support": 12
-      },
-      "WEATHER_QUERY": {
-        "precision": 0.8182,
-        "recall": 1.0,
-        "f1": 0.9,
-        "support": 9
+        "precision": 0.875,
+        "recall": 0.875,
+        "f1": 0.875,
+        "support": 16
       }
     },
     "confusion_matrix": {
@@ -132,19 +118,16 @@
         "ASK_QUESTION",
         "CALCULATE",
         "CREATE_REMINDER",
-        "FOCUS_MODE",
         "GET_DATE",
         "GET_TIME",
         "GREETING",
         "OPEN_WEBSITE",
         "SET_TIMER",
-        "UNKNOWN",
-        "WEATHER_QUERY"
+        "UNKNOWN"
       ],
       "matrix": [
         [
-          7,
-          0,
+          8,
           0,
           0,
           0,
@@ -152,8 +135,7 @@
           1,
           0,
           0,
-          0,
-          1
+          0
         ],
         [
           0,
@@ -164,42 +146,12 @@
           0,
           0,
           0,
-          0,
-          0,
           0
         ],
         [
           0,
           0,
           10,
-          1,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          0,
-          9,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          0,
-          0,
-          7,
           0,
           0,
           0,
@@ -211,9 +163,7 @@
           0,
           0,
           0,
-          0,
-          1,
-          7,
+          8,
           0,
           0,
           0,
@@ -221,20 +171,28 @@
           0
         ],
         [
-          1,
           0,
           0,
           0,
           0,
+          8,
           0,
-          7,
           0,
           0,
-          1,
           0
         ],
         [
           0,
+          0,
+          0,
+          0,
+          0,
+          8,
+          0,
+          0,
+          1
+        ],
+        [
           0,
           0,
           0,
@@ -243,11 +201,9 @@
           1,
           8,
           0,
-          0,
           0
         ],
         [
-          0,
           0,
           0,
           0,
@@ -256,7 +212,6 @@
           0,
           0,
           9,
-          0,
           0
         ],
         [
@@ -268,61 +223,21 @@
           0,
           1,
           0,
-          0,
-          10,
-          0
-        ],
-        [
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          9
+          14
         ]
       ]
     }
   },
   "misclassified_test_examples": [
     {
-      "text": "sup",
-      "expected": "GREETING",
+      "text": "don't let me forget to pay rent on friday",
+      "expected": "CREATE_REMINDER",
       "predicted": "UNKNOWN"
     },
     {
-      "text": "how do you do",
-      "expected": "GREETING",
-      "predicted": "ASK_QUESTION"
-    },
-    {
-      "text": "what hour is it",
-      "expected": "GET_TIME",
-      "predicted": "GET_DATE"
-    },
-    {
-      "text": "is it the weekend",
-      "expected": "GET_DATE",
-      "predicted": "WEATHER_QUERY"
-    },
-    {
-      "text": "don't let me forget to pay rent on friday",
-      "expected": "CREATE_REMINDER",
-      "predicted": "FOCUS_MODE"
-    },
-    {
-      "text": "nothing",
+      "text": "begin deep work",
       "expected": "UNKNOWN",
-      "predicted": "GREETING"
-    },
-    {
-      "text": "how far is the moon",
-      "expected": "ASK_QUESTION",
-      "predicted": "WEATHER_QUERY"
+      "predicted": "ASK_QUESTION"
     },
     {
       "text": "what are you",
@@ -330,45 +245,50 @@
       "predicted": "GREETING"
     },
     {
-      "text": "what is my bank balance",
-      "expected": "UNKNOWN",
-      "predicted": "ASK_QUESTION"
-    },
-    {
       "text": "bring up linkedin",
       "expected": "OPEN_WEBSITE",
       "predicted": "GREETING"
+    },
+    {
+      "text": "sup",
+      "expected": "GREETING",
+      "predicted": "UNKNOWN"
+    },
+    {
+      "text": "send an email to john",
+      "expected": "UNKNOWN",
+      "predicted": "OPEN_WEBSITE"
     }
   ],
   "cv_scores": [
-    0.9327,
-    0.9231,
-    0.8641,
-    0.932,
-    0.9126
+    0.8889,
+    0.9111,
+    0.9222,
+    0.9222,
+    0.9551
   ],
   "unseen_evaluation": {
-    "size": 35,
+    "size": 29,
     "accuracy": 1.0,
-    "mean_confidence": 0.9635,
+    "mean_confidence": 0.9722,
     "examples": [
       {
         "text": "yo nova whats good",
         "expected": "GREETING",
         "predicted": "GREETING",
-        "confidence": 0.8592
+        "confidence": 0.8542
       },
       {
         "text": "hey, hope you are well",
         "expected": "GREETING",
         "predicted": "GREETING",
-        "confidence": 0.9982
+        "confidence": 0.9983
       },
       {
         "text": "good morning to you",
         "expected": "GREETING",
         "predicted": "GREETING",
-        "confidence": 0.9986
+        "confidence": 0.9988
       },
       {
         "text": "got the time",
@@ -380,7 +300,7 @@
         "text": "what time have we got now",
         "expected": "GET_TIME",
         "predicted": "GET_TIME",
-        "confidence": 0.9949
+        "confidence": 0.9948
       },
       {
         "text": "nova can you tell me the time right now",
@@ -392,19 +312,19 @@
         "text": "which day are we on",
         "expected": "GET_DATE",
         "predicted": "GET_DATE",
-        "confidence": 0.9687
+        "confidence": 0.966
       },
       {
         "text": "what's the date going to be tomorrow",
         "expected": "GET_DATE",
         "predicted": "GET_DATE",
-        "confidence": 0.9503
+        "confidence": 0.974
       },
       {
         "text": "tell me today's day",
         "expected": "GET_DATE",
         "predicted": "GET_DATE",
-        "confidence": 0.9826
+        "confidence": 0.9867
       },
       {
         "text": "what is 72 divided by 8",
@@ -416,31 +336,31 @@
         "text": "compute thirty times twelve",
         "expected": "CALCULATE",
         "predicted": "CALCULATE",
-        "confidence": 0.9839
+        "confidence": 0.9854
       },
       {
         "text": "what's the square root of 49",
         "expected": "CALCULATE",
         "predicted": "CALCULATE",
-        "confidence": 0.9922
+        "confidence": 0.9926
       },
       {
         "text": "could you start a countdown for five minutes",
         "expected": "SET_TIMER",
         "predicted": "SET_TIMER",
-        "confidence": 0.9929
+        "confidence": 0.999
       },
       {
         "text": "timer for twenty minutes please",
         "expected": "SET_TIMER",
         "predicted": "SET_TIMER",
-        "confidence": 0.9987
+        "confidence": 0.9998
       },
       {
         "text": "stop my countdown",
         "expected": "SET_TIMER",
         "predicted": "SET_TIMER",
-        "confidence": 0.856
+        "confidence": 0.8848
       },
       {
         "text": "remind me to buy eggs at 6 pm",
@@ -452,115 +372,79 @@
         "text": "please set a reminder to call the bank tomorrow",
         "expected": "CREATE_REMINDER",
         "predicted": "CREATE_REMINDER",
-        "confidence": 0.9979
+        "confidence": 0.9989
       },
       {
         "text": "which reminders are pending",
         "expected": "CREATE_REMINDER",
         "predicted": "CREATE_REMINDER",
-        "confidence": 0.9395
-      },
-      {
-        "text": "start a focus block of forty minutes",
-        "expected": "FOCUS_MODE",
-        "predicted": "FOCUS_MODE",
-        "confidence": 0.9605
-      },
-      {
-        "text": "i really need to concentrate now",
-        "expected": "FOCUS_MODE",
-        "predicted": "FOCUS_MODE",
-        "confidence": 0.9294
-      },
-      {
-        "text": "end my focus mode",
-        "expected": "FOCUS_MODE",
-        "predicted": "FOCUS_MODE",
-        "confidence": 0.9985
-      },
-      {
-        "text": "is it going to be sunny tomorrow",
-        "expected": "WEATHER_QUERY",
-        "predicted": "WEATHER_QUERY",
-        "confidence": 0.7509
-      },
-      {
-        "text": "what is the temperature like in chennai",
-        "expected": "WEATHER_QUERY",
-        "predicted": "WEATHER_QUERY",
-        "confidence": 0.9948
-      },
-      {
-        "text": "will i need an umbrella tomorrow",
-        "expected": "WEATHER_QUERY",
-        "predicted": "WEATHER_QUERY",
-        "confidence": 0.9896
+        "confidence": 0.9451
       },
       {
         "text": "could you open youtube for me",
         "expected": "OPEN_WEBSITE",
         "predicted": "OPEN_WEBSITE",
-        "confidence": 0.9949
+        "confidence": 0.9971
       },
       {
         "text": "pull up github please",
         "expected": "OPEN_WEBSITE",
         "predicted": "OPEN_WEBSITE",
-        "confidence": 0.9762
+        "confidence": 0.9789
       },
       {
         "text": "open wikipedia in the browser",
         "expected": "OPEN_WEBSITE",
         "predicted": "OPEN_WEBSITE",
-        "confidence": 0.9848
+        "confidence": 0.9857
       },
       {
         "text": "explain how decision trees work",
         "expected": "ASK_QUESTION",
         "predicted": "ASK_QUESTION",
-        "confidence": 0.9976
+        "confidence": 0.9992
       },
       {
         "text": "what is computer vision",
         "expected": "ASK_QUESTION",
         "predicted": "ASK_QUESTION",
-        "confidence": 0.9436
+        "confidence": 0.9464
       },
       {
         "text": "why do leaves change colour",
         "expected": "ASK_QUESTION",
         "predicted": "ASK_QUESTION",
-        "confidence": 0.9847
+        "confidence": 0.985
       },
       {
         "text": "set an alarm for 7 tomorrow morning",
         "expected": "CREATE_REMINDER",
         "predicted": "CREATE_REMINDER",
-        "confidence": 0.9886
+        "confidence": 0.988
       },
       {
         "text": "wake me at six thirty am",
         "expected": "CREATE_REMINDER",
         "predicted": "CREATE_REMINDER",
-        "confidence": 0.8989
+        "confidence": 0.8816
       },
       {
         "text": "play my workout playlist",
         "expected": "UNKNOWN",
         "predicted": "UNKNOWN",
-        "confidence": 0.9219
+        "confidence": 0.9503
       },
       {
         "text": "switch off the fan",
         "expected": "UNKNOWN",
         "predicted": "UNKNOWN",
-        "confidence": 0.9585
+        "confidence": 0.9513
       },
       {
         "text": "send money to rahul",
         "expected": "UNKNOWN",
         "predicted": "UNKNOWN",
-        "confidence": 0.9498
+        "confidence": 0.9647
       }
     ]
   }

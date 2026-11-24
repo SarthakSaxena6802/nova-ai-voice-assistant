@@ -1,4 +1,4 @@
-"""Builds and holds the long-lived services (model, registry, context, providers)."""
+"""Builds and holds the long-lived services (model, registry, context, knowledge base)."""
 from __future__ import annotations
 
 import time
@@ -11,8 +11,6 @@ from app.core.logging import get_logger
 from app.engine.pipeline import AssistantPipeline
 from app.ml.intent_classifier import IntentClassifier
 from app.services.knowledge_base import KnowledgeBase
-from app.services.llm.base import LLMProvider
-from app.services.llm.factory import create_provider
 
 log = get_logger("container")
 
@@ -24,12 +22,8 @@ class Container:
     registry: ActionRegistry
     contexts: ContextManager
     knowledge_base: KnowledgeBase
-    llm: LLMProvider | None
     pipeline: AssistantPipeline
     started_at: float = field(default_factory=time.time)
-
-    def reload_model(self) -> None:
-        self.classifier.load(self.settings.model_path)
 
 
 def build_container(settings: Settings) -> Container:
@@ -46,8 +40,7 @@ def build_container(settings: Settings) -> Container:
 
     kb = KnowledgeBase()
     kb.load(settings.knowledge_base_path)
-    llm = create_provider(settings)
     registry = build_default_registry()
     contexts = ContextManager()
-    pipeline = AssistantPipeline(classifier, registry, contexts, kb, llm, settings.open_browser_on_server)
-    return Container(settings, classifier, registry, contexts, kb, llm, pipeline)
+    pipeline = AssistantPipeline(classifier, registry, contexts, kb, settings.open_browser_on_server)
+    return Container(settings, classifier, registry, contexts, kb, pipeline)

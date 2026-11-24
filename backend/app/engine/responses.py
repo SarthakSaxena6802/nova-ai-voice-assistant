@@ -11,15 +11,13 @@ INTENT_PHRASES = {
     "CALCULATE": "do a calculation",
     "SET_TIMER": "set or manage a timer",
     "CREATE_REMINDER": "create or manage a reminder",
-    "FOCUS_MODE": "manage focus mode",
-    "WEATHER_QUERY": "check the weather",
     "OPEN_WEBSITE": "open a website",
     "ASK_QUESTION": "answer a general question",
 }
 
 CAPABILITY_SUMMARY = (
-    "I can tell the time and date, do calculations, set timers and reminders, start focus mode, "
-    "open websites, check the weather, or answer questions."
+    "I can tell the time and date, do calculations, set timers and reminders, open websites, "
+    "or answer simple questions."
 )
 
 _YES = re.compile(r"^(?:yes|yeah|yep|yup|sure|ok|okay|correct|right|do it|go ahead|please do|affirmative|absolutely|of course|that is right)\b")

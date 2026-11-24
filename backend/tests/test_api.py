@@ -27,7 +27,6 @@ def test_process_executes_high_confidence_command(say):
     assert len(r["top_intents"]) == 3 and len(r["alternatives"]) == 2
     stages = [s["stage"] for s in r["pipeline"]]
     assert stages[:3] == ["input", "normalize", "classify"] and "action" in stages
-    assert r["id"] is not None
 
 
 def test_process_invalid_input(client):
@@ -79,12 +78,12 @@ def test_medium_confidence_asks_confirmation(say, client):
     # Raise the execute threshold so a normally-executed command lands in the confirm band.
     client.put("/api/settings", json={"execute_threshold": 1.0, "clarify_threshold": 0.3})
     try:
-        r = say("what's the weather like")
+        r = say("what time is it")
         assert r["decision"] == "CONFIRM"
         assert r["context"]["pending"]["kind"] == "confirm"
         yes = say("yes")
         assert yes["context_used"] == "confirmation"
-        assert yes["intent"] == "WEATHER_QUERY" and yes["decision"] == "EXECUTE"
+        assert yes["intent"] == "GET_TIME" and yes["decision"] == "EXECUTE"
     finally:
         client.post("/api/settings/reset")
 
@@ -104,13 +103,6 @@ def test_action_failure_is_reported(say):
 def test_open_website_returns_allowlisted_url(say):
     r = say("Can you open YouTube for me?")
     assert r["success"] and r["data"]["url"] == "https://www.youtube.com"
-
-
-def test_capabilities(client):
-    body = client.get("/api/assistant/capabilities").json()
-    intents = {c["intent"] for c in body["capabilities"]}
-    assert {"GET_TIME", "SET_TIMER", "CREATE_REMINDER", "OPEN_WEBSITE"} <= intents
-    assert any(w["key"] == "github" for w in body["websites"])
 
 
 def test_timer_and_reminder_endpoints(client):
@@ -133,47 +125,14 @@ def test_timer_and_reminder_endpoints(client):
     assert client.post("/api/reminders", json={"message": "x", "due_at": past}).status_code == 422
 
 
-def test_focus_endpoints(client):
-    client.post("/api/focus/stop")
-    s = client.post("/api/focus/start", json={"duration_minutes": 30})
-    assert s.status_code == 201 and s.json()["duration_seconds"] == 1800
-    assert client.post("/api/focus/start", json={}).status_code == 409
-    assert client.get("/api/focus").json()["active"]["id"] == s.json()["id"]
-    assert client.post("/api/focus/stop").json()["status"] == "stopped"
-
-
 def test_settings_persist_and_validate(client):
-    r = client.put("/api/settings", json={"assistant_name": "Nova", "speech_rate": 1.3, "weather_city": "Pune"})
+    r = client.put("/api/settings", json={"assistant_name": "Nova", "speech_rate": 1.3})
     assert r.status_code == 200
     assert client.get("/api/settings").json()["speech_rate"] == 1.3
     bad = client.put("/api/settings", json={"execute_threshold": 0.3, "clarify_threshold": 0.6})
     assert bad.status_code == 422
     assert client.put("/api/settings", json={"theme": "neon"}).status_code == 422
     client.post("/api/settings/reset")
-
-
-def test_history_and_analytics_reflect_real_usage(client, say):
-    say("what time is it")
-    hist = client.get("/api/history?limit=5").json()
-    assert hist["total"] >= 1 and hist["items"][0]["raw_input"] == "what time is it"
-    assert hist["items"][0]["trace"]["pipeline"]
-    stats = client.get("/api/analytics").json()
-    assert stats["total"] >= 1 and stats["executed"] >= 1
-    assert sum(b["count"] for b in stats["confidence_histogram"]) == stats["total"]
-
-    # clearing history keeps anonymous analytics; clearing analytics empties them
-    assert client.delete("/api/history").status_code == 200
-    assert client.get("/api/history").json()["total"] == 0
-    assert client.get("/api/analytics").json()["total"] >= 1
-    client.delete("/api/analytics")
-    assert client.get("/api/analytics").json() == {"total": 0, "empty": True}
-
-
-def test_model_endpoints(client):
-    info = client.get("/api/model").json()
-    assert info["info"]["loaded"] and info["report"]["test_metrics"]["confusion_matrix"]["labels"]
-    p = client.post("/api/model/predict", json={"text": "open github"}).json()
-    assert p["intent"] == "OPEN_WEBSITE" and len(p["ranking"]) == 11
 
 
 def test_notifications_flow(client, db):

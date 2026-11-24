@@ -123,19 +123,6 @@ export function Toggle({ checked, onChange, label, disabled }: { checked: boolea
   );
 }
 
-export function StatTile({ label, value, hint, icon: Icon }: { label: string; value: ReactNode; hint?: ReactNode; icon?: LucideIcon }) {
-  return (
-    <div className="card p-4">
-      <div className="flex items-center justify-between text-xs font-medium text-muted">
-        {label}
-        {Icon && <Icon size={15} />}
-      </div>
-      <div className="mt-2 text-2xl font-semibold tracking-tight text-ink">{value}</div>
-      {hint && <div className="mt-1 text-xs text-muted">{hint}</div>}
-    </div>
-  );
-}
-
 /** Two-step destructive button: first click arms it, second click confirms. */
 export function ConfirmButton({ onConfirm, children, confirmLabel = "Click again to confirm", className = "btn-danger" }: {
   onConfirm: () => void | Promise<void>;

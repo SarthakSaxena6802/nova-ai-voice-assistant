@@ -1,4 +1,4 @@
-import { Brain, Cpu, Mic, RotateCcw, Save, Shield, SlidersHorizontal, Trash2, Volume2 } from "lucide-react";
+import { Brain, Cpu, RotateCcw, Save, SlidersHorizontal, Volume2 } from "lucide-react";
 import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { Badge, Card, ConfirmButton, Field, Toggle } from "../components/ui/primitives";
 import { useAssistant } from "../context/AssistantContext";
@@ -10,8 +10,8 @@ import { pct } from "../utils/format";
 
 export default function SettingsPage() {
   const { settings, update, replace } = useSettings();
-  const { health, online, refresh } = useSystem();
-  const { synthesis, recognition, pushToast, refreshTasks } = useAssistant();
+  const { health, online } = useSystem();
+  const { synthesis, recognition, pushToast } = useAssistant();
   const [form, setForm] = useState<NovaSettings>(settings);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -44,12 +44,10 @@ export default function SettingsPage() {
     window.speechSynthesis.speak(u);
   };
 
-  const done = (title: string) => pushToast({ title, message: "Done.", kind: "system" });
-
   return (
-    <div className="flex flex-col gap-5 pb-24">
+    <div className="flex max-w-3xl flex-col gap-5 pb-24">
       <Section icon={SlidersHorizontal} title="General">
-        <Field label="Assistant name" hint="How Nova refers to itself.">
+        <Field label="Assistant name">
           <input className="input" value={form.assistant_name} maxLength={30} onChange={(e) => set("assistant_name", e.target.value)} />
         </Field>
         <Field label="Your name" hint="Used in greetings. Optional.">
@@ -58,15 +56,12 @@ export default function SettingsPage() {
         <Field label="Theme">
           <Segmented value={form.theme} options={[["dark", "Dark"], ["light", "Light"]]} onChange={(v) => set("theme", v as NovaSettings["theme"])} />
         </Field>
-        <Field label="Start page" hint="Which page opens when you launch Nova.">
-          <Segmented value={form.start_page} options={[["dashboard", "Dashboard"], ["assistant", "Assistant"]]} onChange={(v) => set("start_page", v as NovaSettings["start_page"])} />
-        </Field>
-        <Field label="Greet me on startup">
-          <Toggle label="Greet on startup" checked={form.greet_on_startup} onChange={(v) => set("greet_on_startup", v)} />
-        </Field>
       </Section>
 
       <Section icon={Volume2} title="Voice">
+        <Field label='Hands-free: wake on "Nova"' hint="Listens while this tab is open and only acts on speech containing “Nova”. In Chrome the audio is processed by Google’s speech service.">
+          <Toggle label="Hands-free wake word" checked={form.wake_word_enabled} onChange={(v) => set("wake_word_enabled", v)} disabled={!recognition.supported} />
+        </Field>
         <Field label="Spoken responses" hint={synthesis.supported ? "Nova reads its replies aloud." : "Speech synthesis isn't available in this browser."}>
           <Toggle label="Spoken responses" checked={form.voice_enabled} onChange={(v) => set("voice_enabled", v)} disabled={!synthesis.supported} />
         </Field>
@@ -86,18 +81,12 @@ export default function SettingsPage() {
             <button className="btn-outline px-3 py-1.5 text-xs" onClick={testVoice} disabled={!synthesis.supported}>Test</button>
           </div>
         </Field>
-        <Field label="Send voice commands automatically" hint="Off: the transcript is placed in the text box so you can edit it first.">
+        <Field label="Send mic commands automatically" hint="Off: what you said is placed in the text box so you can edit it first (mic button only).">
           <Toggle label="Auto-send voice" checked={form.auto_send_voice} onChange={(v) => set("auto_send_voice", v)} />
-        </Field>
-        <Field label="Microphone input">
-          <span className="flex items-center gap-2 text-sm text-ink2">
-            <Mic size={15} />
-            {recognition.supported ? "Supported (Web Speech API)" : "Not supported — use Chrome or Edge"}
-          </span>
         </Field>
       </Section>
 
-      <Section icon={Brain} title="AI & decision engine">
+      <Section icon={Brain} title="Decision engine">
         <Field label={`Execute threshold · ${pct(form.execute_threshold, 0)}`} hint="At or above this confidence Nova acts directly.">
           <input type="range" min={0.3} max={0.99} step={0.01} value={form.execute_threshold}
             onChange={(e) => set("execute_threshold", Math.max(Number(e.target.value), form.clarify_threshold + 0.05))} className="w-full accent-[rgb(var(--accent))]" />
@@ -109,64 +98,19 @@ export default function SettingsPage() {
         <Field label={`Context memory · ${form.context_timeout_seconds}s`} hint="How long Nova remembers a pending question or the last action for follow-ups.">
           <input type="range" min={15} max={600} step={15} value={form.context_timeout_seconds} onChange={(e) => set("context_timeout_seconds", Number(e.target.value))} className="w-full accent-[rgb(var(--accent))]" />
         </Field>
-        <Field label="Use conversational AI for questions" hint="Only applies when a provider is configured on the server.">
-          <Toggle label="Conversational AI" checked={form.llm_enabled} onChange={(v) => set("llm_enabled", v)} />
-        </Field>
-        <Field label="AI provider status">
-          {health?.services.llm.provider ? (
-            <Badge tone={health.services.llm.configured ? "good" : "warn"}>
-              {health.services.llm.provider} · {health.services.llm.model} · {health.services.llm.configured ? "configured" : "missing key"}
-            </Badge>
-          ) : (
-            <span className="text-sm text-muted">Not configured — offline knowledge base only (set NOVA_LLM_PROVIDER in .env)</span>
-          )}
-        </Field>
-        <Field label={`Default focus length · ${form.focus_default_minutes} min`}>
-          <input type="range" min={5} max={120} step={5} value={form.focus_default_minutes} onChange={(e) => set("focus_default_minutes", Number(e.target.value))} className="w-full accent-[rgb(var(--accent))]" />
-        </Field>
-        <Field label="Weather city" hint="Used when you ask about the weather without naming a place.">
-          <input className="input" value={form.weather_city} maxLength={80} onChange={(e) => set("weather_city", e.target.value)} placeholder="e.g. Pune" />
-        </Field>
-        <Field label="Temperature unit">
-          <Segmented value={form.temperature_unit} options={[["celsius", "°C"], ["fahrenheit", "°F"]]} onChange={(v) => set("temperature_unit", v as NovaSettings["temperature_unit"])} />
-        </Field>
-      </Section>
-
-      <Section icon={Shield} title="Privacy">
-        <p className="pt-3 text-sm text-ink2">All data stays on this computer in a local SQLite database. Analytics store only intent, confidence and outcome — never your words.</p>
-        <Field label="Conversation history" hint="Deletes stored inputs and responses.">
-          <ConfirmButton onConfirm={async () => { await api.clearHistory(); done("History cleared"); }}><Trash2 size={14} /> Clear history</ConfirmButton>
-        </Field>
-        <Field label="Analytics" hint="Deletes anonymous usage statistics.">
-          <ConfirmButton onConfirm={async () => { await api.clearAnalytics(); done("Analytics cleared"); }}><Trash2 size={14} /> Clear analytics</ConfirmButton>
-        </Field>
-        <Field label="Reminders" hint="Deletes all reminders, pending and completed.">
-          <ConfirmButton onConfirm={async () => { await api.clearReminders(); await refreshTasks(); done("Reminders cleared"); }}><Trash2 size={14} /> Clear reminders</ConfirmButton>
-        </Field>
       </Section>
 
       <Section icon={Cpu} title="System">
         <Field label="Backend">
-          <Badge tone={online ? "good" : "bad"}>{online ? `Online · v${health?.version} · up ${Math.round((health?.uptime_seconds ?? 0) / 60)} min` : "Offline"}</Badge>
+          <Badge tone={online ? "good" : "bad"}>{online ? `Online · v${health?.version}` : "Offline"}</Badge>
         </Field>
         <Field label="Intent model" hint={health?.model.name ?? undefined}>
-          <div className="flex flex-wrap items-center gap-2">
-            <Badge tone={health?.model.loaded ? "good" : "bad"}>{health?.model.loaded ? `v${health.model.version} · ${pct(health.model.accuracy)} acc.` : "Not loaded"}</Badge>
-            <button className="btn-outline px-2.5 py-1 text-xs" onClick={async () => {
-              try { await api.reloadModel(); await refresh(); done("Model reloaded"); } catch (e) { setError((e as Error).message); }
-            }}><RotateCcw size={12} /> Reload</button>
-          </div>
-        </Field>
-        <Field label="Services">
-          <div className="flex flex-wrap gap-1.5">
-            <Badge tone={health?.database.ok ? "good" : "bad"}>SQLite</Badge>
-            <Badge tone={health?.services.weather.enabled ? "good" : "muted"}>Weather · Open-Meteo</Badge>
-            <Badge tone="good">Knowledge base · {health?.services.knowledge_base.entries ?? 0}</Badge>
-            <Badge tone={health?.services.llm.configured ? "good" : "muted"}>LLM</Badge>
-          </div>
+          <Badge tone={health?.model.loaded ? "good" : "bad"}>
+            {health?.model.loaded ? `v${health.model.version} · ${pct(health.model.accuracy)} test accuracy` : "Not loaded"}
+          </Badge>
         </Field>
         <Field label="Defaults">
-          <ConfirmButton className="btn-outline" confirmLabel="Reset all settings?" onConfirm={async () => { replace(await api.resetSettings()); done("Settings reset"); }}>
+          <ConfirmButton className="btn-outline" confirmLabel="Reset all settings?" onConfirm={async () => replace(await api.resetSettings())}>
             <RotateCcw size={14} /> Reset settings
           </ConfirmButton>
         </Field>

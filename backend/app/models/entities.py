@@ -1,59 +1,19 @@
 """Database schema.
 
-* ``interactions``      – full conversation history (text, prediction, decision, response).
-* ``analytics_events``  – anonymised per-command metrics (no raw text), so analytics
-                          can be kept even after the user clears their history.
-* ``timers`` / ``reminders`` / ``focus_sessions`` – persistent task state.
-* ``notifications``     – completion events produced by the background scheduler.
-* ``settings``          – key/value user preferences.
+* ``timers`` / ``reminders`` – persistent task state.
+* ``notifications``         – completion events produced by the background scheduler.
+* ``settings``              – key/value user preferences.
 """
 from __future__ import annotations
 
 from datetime import datetime
 from typing import Any
 
-from sqlalchemy import JSON, Boolean, DateTime, Float, Integer, String, Text
+from sqlalchemy import JSON, Boolean, DateTime, Integer, String, Text
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.core.timeutils import now
 from app.database.session import Base
-
-
-class Interaction(Base):
-    __tablename__ = "interactions"
-
-    id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    created_at: Mapped[datetime] = mapped_column(DateTime, default=now, index=True)
-    session_id: Mapped[str] = mapped_column(String(64), default="default")
-    source: Mapped[str] = mapped_column(String(20), default="text")
-    raw_input: Mapped[str] = mapped_column(Text)
-    normalized_input: Mapped[str] = mapped_column(Text, default="")
-    intent: Mapped[str] = mapped_column(String(40), index=True)
-    confidence: Mapped[float] = mapped_column(Float, default=0.0)
-    alternatives: Mapped[list[dict[str, Any]]] = mapped_column(JSON, default=list)
-    entities: Mapped[dict[str, Any]] = mapped_column(JSON, default=dict)
-    decision: Mapped[str] = mapped_column(String(20), index=True)
-    decision_reason: Mapped[str] = mapped_column(Text, default="")
-    action: Mapped[str | None] = mapped_column(String(40), nullable=True)
-    response: Mapped[str] = mapped_column(Text, default="")
-    success: Mapped[bool] = mapped_column(Boolean, default=False)
-    context_used: Mapped[str | None] = mapped_column(String(60), nullable=True)
-    processing_ms: Mapped[float] = mapped_column(Float, default=0.0)
-    trace: Mapped[dict[str, Any]] = mapped_column(JSON, default=dict)
-
-
-class AnalyticsEvent(Base):
-    __tablename__ = "analytics_events"
-
-    id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    created_at: Mapped[datetime] = mapped_column(DateTime, default=now, index=True)
-    source: Mapped[str] = mapped_column(String(20), default="text")
-    intent: Mapped[str] = mapped_column(String(40), index=True)
-    confidence: Mapped[float] = mapped_column(Float, default=0.0)
-    decision: Mapped[str] = mapped_column(String(20), index=True)
-    success: Mapped[bool] = mapped_column(Boolean, default=False)
-    context_used: Mapped[bool] = mapped_column(Boolean, default=False)
-    processing_ms: Mapped[float] = mapped_column(Float, default=0.0)
 
 
 class Timer(Base):
@@ -80,23 +40,12 @@ class Reminder(Base):
     completed_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
 
 
-class FocusSession(Base):
-    __tablename__ = "focus_sessions"
-
-    id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    duration_seconds: Mapped[int] = mapped_column(Integer)
-    started_at: Mapped[datetime] = mapped_column(DateTime, default=now)
-    ends_at: Mapped[datetime] = mapped_column(DateTime)
-    status: Mapped[str] = mapped_column(String(20), default="active", index=True)  # active|completed|stopped
-    ended_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
-
-
 class Notification(Base):
     __tablename__ = "notifications"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=now, index=True)
-    kind: Mapped[str] = mapped_column(String(20))  # timer|reminder|focus|system
+    kind: Mapped[str] = mapped_column(String(20))  # timer|reminder|system
     title: Mapped[str] = mapped_column(String(120))
     message: Mapped[str] = mapped_column(Text)
     ref_id: Mapped[int | None] = mapped_column(Integer, nullable=True)

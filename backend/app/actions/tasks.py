@@ -1,4 +1,4 @@
-"""Stateful actions: timers, reminders, focus sessions."""
+"""Stateful actions: timers and reminders."""
 from __future__ import annotations
 
 import re
@@ -8,8 +8,7 @@ from typing import Any
 from app.actions.base import ActionContext, ActionResult, BaseAction, second_person
 from app.core.timeutils import describe_datetime, duration_adjective, humanize_seconds
 from app.schemas.tasks import ReminderOut, TimerOut
-from app.services import focus_service, reminder_service, timer_service
-from app.services.focus_service import FocusError
+from app.services import reminder_service, timer_service
 from app.services.reminder_service import ReminderError
 from app.services.timer_service import TimerError
 
@@ -136,33 +135,3 @@ class ReminderAction(BaseAction):
         reminder_service.delete_reminder(ctx.db, target)
         return self.ok(f"Deleted the reminder to {second_person(target.message)}.", {"reminder_id": target.id})
 
-
-class FocusAction(BaseAction):
-    intent = "FOCUS_MODE"
-    name = "Focus mode"
-    description = "Pomodoro-style focus sessions with a countdown, completion notification and session statistics."
-    examples = ["Enable focus mode", "Start a 50 minute focus session", "Stop focus mode"]
-
-    def execute(self, entities: dict[str, Any], ctx: ActionContext) -> ActionResult:
-        op = entities.get("operation", "start")
-        if op == "stop":
-            session = focus_service.stop_session(ctx.db)
-            if session is None:
-                return self.fail("Focus mode isn't on right now.", "no_active_session")
-            return self.ok("Focus mode is off. Nice work!", {"focus": focus_service.to_out(session).model_dump(mode="json")})
-        if op == "status":
-            session = focus_service.active_session(ctx.db)
-            if session is None:
-                return self.ok("Focus mode is off.", {"focus": None})
-            out = focus_service.to_out(session)
-            return self.ok(f"You're in focus mode with {humanize_seconds(out.remaining_seconds)} remaining.", {"focus": out.model_dump(mode="json")})
-        seconds = int(entities.get("duration_seconds") or ctx.prefs.focus_default_minutes * 60)
-        try:
-            session = focus_service.start_session(ctx.db, seconds)
-        except FocusError as exc:
-            return self.fail(str(exc), "focus_error")
-        return self.ok(
-            f"Focus mode is on for {humanize_seconds(seconds)}. I'll let you know when it's time for a break.",
-            {"focus": focus_service.to_out(session).model_dump(mode="json")},
-            context={"focus_id": session.id, "duration_seconds": seconds},
-        )

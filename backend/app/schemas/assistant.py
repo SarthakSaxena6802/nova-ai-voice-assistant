@@ -47,7 +47,6 @@ class Thresholds(BaseModel):
 
 
 class ProcessResponse(BaseModel):
-    id: int | None = None
     timestamp: datetime
     session_id: str
     source: str

@@ -11,7 +11,7 @@ from app.core.timeutils import now
 from app.models import Timer
 from app.nlp.websites import SAFE_WEBSITES
 from app.schemas.settings import NovaSettings
-from app.services import focus_service, notification_service, reminder_service, timer_service
+from app.services import notification_service, reminder_service, timer_service
 from app.services.knowledge_base import KnowledgeBase
 
 
@@ -109,27 +109,11 @@ def test_due_reminder_notifies_once(db):
     assert rem.notified and rem.status == "pending"
 
 
-def test_focus_mode(registry, actx, db):
-    focus_service.stop_session(db)
-    r = registry.execute("FOCUS_MODE", {"operation": "start", "duration_seconds": 1500}, actx)
-    assert r.success and "25 minutes" in r.message
-    again = registry.execute("FOCUS_MODE", {"operation": "start"}, actx)
-    assert not again.success  # only one session at a time
-    stop = registry.execute("FOCUS_MODE", {"operation": "stop"}, actx)
-    assert stop.success and focus_service.active_session(db) is None
-
-
 def test_website_mapping_uses_allowlist(registry, actx):
     r = registry.execute("OPEN_WEBSITE", {"website": "YouTube", "url": "https://www.youtube.com"}, actx)
     assert r.success and r.data["url"] == SAFE_WEBSITES["youtube"].url and r.data["opened_by"] == "client"
     bad = registry.execute("OPEN_WEBSITE", {"website": "Evil", "url": "https://evil.example.com"}, actx)
     assert not bad.success and bad.error == "not_allowed"
-
-
-def test_weather_disabled_does_not_fabricate(registry, actx):
-    r = registry.execute("WEATHER_QUERY", {"city": "London", "day": "today"}, actx)
-    assert not r.success and r.error == "weather_not_configured"
-    assert "°" not in r.message
 
 
 def test_question_uses_knowledge_base_offline(registry, actx):

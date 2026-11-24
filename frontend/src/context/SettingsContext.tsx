@@ -6,19 +6,14 @@ export const DEFAULT_SETTINGS: NovaSettings = {
   assistant_name: "Nova",
   user_name: "",
   theme: "dark",
-  start_page: "dashboard",
-  greet_on_startup: true,
   voice_enabled: true,
   voice_name: "",
   speech_rate: 1,
   auto_send_voice: true,
+  wake_word_enabled: true,
   execute_threshold: 0.75,
   clarify_threshold: 0.45,
-  llm_enabled: true,
   context_timeout_seconds: 120,
-  focus_default_minutes: 25,
-  weather_city: "",
-  temperature_unit: "celsius",
 };
 
 interface SettingsContextValue {

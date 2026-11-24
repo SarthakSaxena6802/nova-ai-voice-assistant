@@ -14,8 +14,6 @@ sys.path.insert(0, str(BACKEND_DIR))
 _TMP = Path(tempfile.mkdtemp(prefix="nova-tests-"))
 os.environ["NOVA_DATABASE_URL"] = f"sqlite:///{(_TMP / 'test.db').as_posix()}"
 os.environ["NOVA_OPEN_BROWSER_ON_SERVER"] = "false"
-os.environ["NOVA_WEATHER_ENABLED"] = "false"
-os.environ["NOVA_LLM_PROVIDER"] = ""
 os.environ["NOVA_LOG_LEVEL"] = "WARNING"
 
 from app.core.config import get_settings  # noqa: E402

@@ -9,8 +9,6 @@
   "CALCULATE",
   "SET_TIMER",
   "CREATE_REMINDER",
-  "FOCUS_MODE",
-  "WEATHER_QUERY",
   "OPEN_WEBSITE",
   "ASK_QUESTION",
   "UNKNOWN"
@@ -1138,355 +1136,83 @@
   },
   {
    "text": "enable focus mode",
-   "intent": "FOCUS_MODE"
+   "intent": "UNKNOWN"
   },
   {
    "text": "i want to focus",
-   "intent": "FOCUS_MODE"
+   "intent": "UNKNOWN"
   },
   {
    "text": "start productivity mode",
-   "intent": "FOCUS_MODE"
+   "intent": "UNKNOWN"
   },
   {
    "text": "help me avoid distractions",
-   "intent": "FOCUS_MODE"
+   "intent": "UNKNOWN"
   },
   {
    "text": "turn on focus mode",
-   "intent": "FOCUS_MODE"
+   "intent": "UNKNOWN"
   },
   {
    "text": "start a focus session",
-   "intent": "FOCUS_MODE"
+   "intent": "UNKNOWN"
   },
   {
    "text": "start a pomodoro",
-   "intent": "FOCUS_MODE"
+   "intent": "UNKNOWN"
   },
   {
    "text": "begin deep work",
-   "intent": "FOCUS_MODE"
-  },
-  {
-   "text": "focus mode for 50 minutes",
-   "intent": "FOCUS_MODE"
-  },
-  {
-   "text": "start a 25 minute focus session",
-   "intent": "FOCUS_MODE"
+   "intent": "UNKNOWN"
   },
   {
    "text": "i need to concentrate",
-   "intent": "FOCUS_MODE"
-  },
-  {
-   "text": "let's get some work done",
-   "intent": "FOCUS_MODE"
+   "intent": "UNKNOWN"
   },
   {
    "text": "activate do not disturb",
-   "intent": "FOCUS_MODE"
-  },
-  {
-   "text": "start studying mode",
-   "intent": "FOCUS_MODE"
-  },
-  {
-   "text": "focus for one hour",
-   "intent": "FOCUS_MODE"
-  },
-  {
-   "text": "help me concentrate for 30 minutes",
-   "intent": "FOCUS_MODE"
-  },
-  {
-   "text": "i want to study without distractions",
-   "intent": "FOCUS_MODE"
-  },
-  {
-   "text": "enable productivity mode",
-   "intent": "FOCUS_MODE"
-  },
-  {
-   "text": "start a work session",
-   "intent": "FOCUS_MODE"
-  },
-  {
-   "text": "go into focus mode",
-   "intent": "FOCUS_MODE"
-  },
-  {
-   "text": "start pomodoro timer",
-   "intent": "FOCUS_MODE"
-  },
-  {
-   "text": "begin a study session",
-   "intent": "FOCUS_MODE"
-  },
-  {
-   "text": "stop focus mode",
-   "intent": "FOCUS_MODE"
-  },
-  {
-   "text": "end the focus session",
-   "intent": "FOCUS_MODE"
-  },
-  {
-   "text": "turn off focus mode",
-   "intent": "FOCUS_MODE"
-  },
-  {
-   "text": "disable focus mode",
-   "intent": "FOCUS_MODE"
-  },
-  {
-   "text": "how long is left in my focus session",
-   "intent": "FOCUS_MODE"
-  },
-  {
-   "text": "am i in focus mode",
-   "intent": "FOCUS_MODE"
-  },
-  {
-   "text": "focus session status",
-   "intent": "FOCUS_MODE"
-  },
-  {
-   "text": "pause focus mode",
-   "intent": "FOCUS_MODE"
-  },
-  {
-   "text": "i am done focusing",
-   "intent": "FOCUS_MODE"
-  },
-  {
-   "text": "exit productivity mode",
-   "intent": "FOCUS_MODE"
-  },
-  {
-   "text": "focus mode on",
-   "intent": "FOCUS_MODE"
-  },
-  {
-   "text": "start fokus mode",
-   "intent": "FOCUS_MODE"
-  },
-  {
-   "text": "start focus mod",
-   "intent": "FOCUS_MODE"
-  },
-  {
-   "text": "lock in for 45 minutes",
-   "intent": "FOCUS_MODE"
-  },
-  {
-   "text": "time to focus",
-   "intent": "FOCUS_MODE"
-  },
-  {
-   "text": "help me stay productive",
-   "intent": "FOCUS_MODE"
-  },
-  {
-   "text": "block distractions for an hour",
-   "intent": "FOCUS_MODE"
-  },
-  {
-   "text": "deep work mode on",
-   "intent": "FOCUS_MODE"
-  },
-  {
-   "text": "i want to be productive",
-   "intent": "FOCUS_MODE"
-  },
-  {
-   "text": "start a concentration session",
-   "intent": "FOCUS_MODE"
-  },
-  {
-   "text": "silence distractions while i study",
-   "intent": "FOCUS_MODE"
-  },
-  {
-   "text": "focus",
-   "intent": "FOCUS_MODE"
-  },
-  {
-   "text": "let me focus for 20 minutes",
-   "intent": "FOCUS_MODE"
+   "intent": "UNKNOWN"
   },
   {
    "text": "what's the weather like",
-   "intent": "WEATHER_QUERY"
+   "intent": "UNKNOWN"
   },
   {
    "text": "will it rain today",
-   "intent": "WEATHER_QUERY"
+   "intent": "UNKNOWN"
   },
   {
    "text": "tell me the weather",
-   "intent": "WEATHER_QUERY"
-  },
-  {
-   "text": "how's the weather",
-   "intent": "WEATHER_QUERY"
-  },
-  {
-   "text": "what is the weather today",
-   "intent": "WEATHER_QUERY"
+   "intent": "UNKNOWN"
   },
   {
    "text": "is it going to rain",
-   "intent": "WEATHER_QUERY"
+   "intent": "UNKNOWN"
   },
   {
    "text": "what's the temperature outside",
-   "intent": "WEATHER_QUERY"
-  },
-  {
-   "text": "how hot is it today",
-   "intent": "WEATHER_QUERY"
-  },
-  {
-   "text": "how cold is it outside",
-   "intent": "WEATHER_QUERY"
+   "intent": "UNKNOWN"
   },
   {
    "text": "do i need an umbrella",
-   "intent": "WEATHER_QUERY"
+   "intent": "UNKNOWN"
   },
   {
    "text": "weather forecast",
-   "intent": "WEATHER_QUERY"
-  },
-  {
-   "text": "what is the forecast for tomorrow",
-   "intent": "WEATHER_QUERY"
+   "intent": "UNKNOWN"
   },
   {
    "text": "weather in london",
-   "intent": "WEATHER_QUERY"
-  },
-  {
-   "text": "what's the weather in new york",
-   "intent": "WEATHER_QUERY"
+   "intent": "UNKNOWN"
   },
   {
    "text": "is it sunny outside",
-   "intent": "WEATHER_QUERY"
-  },
-  {
-   "text": "will it snow tomorrow",
-   "intent": "WEATHER_QUERY"
+   "intent": "UNKNOWN"
   },
   {
    "text": "how's the weather in mumbai",
-   "intent": "WEATHER_QUERY"
-  },
-  {
-   "text": "temperature",
-   "intent": "WEATHER_QUERY"
-  },
-  {
-   "text": "current weather",
-   "intent": "WEATHER_QUERY"
-  },
-  {
-   "text": "weather please",
-   "intent": "WEATHER_QUERY"
-  },
-  {
-   "text": "is it windy today",
-   "intent": "WEATHER_QUERY"
-  },
-  {
-   "text": "what's the humidity",
-   "intent": "WEATHER_QUERY"
-  },
-  {
-   "text": "should i wear a jacket today",
-   "intent": "WEATHER_QUERY"
-  },
-  {
-   "text": "tell me the forecast",
-   "intent": "WEATHER_QUERY"
-  },
-  {
-   "text": "weather report",
-   "intent": "WEATHER_QUERY"
-  },
-  {
-   "text": "what's it like outside",
-   "intent": "WEATHER_QUERY"
-  },
-  {
-   "text": "is it raining",
-   "intent": "WEATHER_QUERY"
-  },
-  {
-   "text": "will it be cloudy tomorrow",
-   "intent": "WEATHER_QUERY"
-  },
-  {
-   "text": "what's the temperature in delhi",
-   "intent": "WEATHER_QUERY"
-  },
-  {
-   "text": "weather update",
-   "intent": "WEATHER_QUERY"
-  },
-  {
-   "text": "check the weather",
-   "intent": "WEATHER_QUERY"
-  },
-  {
-   "text": "how is the weather in paris",
-   "intent": "WEATHER_QUERY"
-  },
-  {
-   "text": "what's the whether like",
-   "intent": "WEATHER_QUERY"
-  },
-  {
-   "text": "wheather today",
-   "intent": "WEATHER_QUERY"
-  },
-  {
-   "text": "is it hot outside",
-   "intent": "WEATHER_QUERY"
-  },
-  {
-   "text": "what will the weather be like this weekend",
-   "intent": "WEATHER_QUERY"
-  },
-  {
-   "text": "any rain today",
-   "intent": "WEATHER_QUERY"
-  },
-  {
-   "text": "how warm is it",
-   "intent": "WEATHER_QUERY"
-  },
-  {
-   "text": "weather for tomorrow",
-   "intent": "WEATHER_QUERY"
-  },
-  {
-   "text": "is there a storm coming",
-   "intent": "WEATHER_QUERY"
-  },
-  {
-   "text": "what is the weather in tokyo right now",
-   "intent": "WEATHER_QUERY"
-  },
-  {
-   "text": "climate today",
-   "intent": "WEATHER_QUERY"
-  },
-  {
-   "text": "give me the weather forecast for bangalore",
-   "intent": "WEATHER_QUERY"
+   "intent": "UNKNOWN"
   },
   {
    "text": "open youtube",
