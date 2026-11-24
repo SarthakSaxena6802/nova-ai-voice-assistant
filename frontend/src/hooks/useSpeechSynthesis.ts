@@ -20,6 +20,8 @@ export function useSpeechSynthesis(opts: { enabled: boolean; voiceName: string; 
   const spokenKeys = useRef<Set<string>>(new Set());
   const optsRef = useRef(opts);
   optsRef.current = opts;
+  // Chrome may garbage-collect an utterance mid-speech and then never fire `onend`; holding a reference prevents that.
+  const current = useRef<SpeechSynthesisUtterance | null>(null);
 
   useEffect(() => {
     if (!supported) return;
@@ -28,6 +30,15 @@ export function useSpeechSynthesis(opts: { enabled: boolean; voiceName: string; 
     window.speechSynthesis.addEventListener("voiceschanged", load);
     return () => window.speechSynthesis.removeEventListener("voiceschanged", load);
   }, [supported]);
+
+  // Fallback for missed `onend` events: trust the browser's own flag.
+  useEffect(() => {
+    if (!speaking || !supported) return;
+    const id = window.setInterval(() => {
+      if (!window.speechSynthesis.speaking && !window.speechSynthesis.pending) setSpeaking(false);
+    }, 400);
+    return () => window.clearInterval(id);
+  }, [speaking, supported]);
 
   const cancel = useCallback(() => {
     if (!supported) return;
@@ -49,9 +60,10 @@ export function useSpeechSynthesis(opts: { enabled: boolean; voiceName: string; 
       const voice = window.speechSynthesis.getVoices().find((v) => v.name === voiceName);
       if (voice) utterance.voice = voice;
       utterance.rate = rate;
-      utterance.onstart = () => setSpeaking(true);
       utterance.onend = () => setSpeaking(false);
       utterance.onerror = () => setSpeaking(false);
+      current.current = utterance;
+      setSpeaking(true); // set immediately so the wake-word listener pauses before the audio starts
       window.speechSynthesis.speak(utterance);
     },
     [supported],

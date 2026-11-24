@@ -121,7 +121,15 @@ export function AssistantProvider({ children }: { children: ReactNode }) {
         setSelected(result);
         synthesis.speak(result.response, `msg-${id}`);
         if (result.success && result.data?.url && result.data?.opened_by === "client") {
-          window.open(result.data.url as string, "_blank", "noopener,noreferrer");
+          // No "noopener" feature here: it makes window.open return null, and we need the handle to detect a blocked pop-up.
+          const tab = window.open(result.data.url as string, "_blank");
+          if (tab) tab.opener = null;
+          else
+            pushToast({
+              title: "Pop-up blocked",
+              message: `Click the ${result.data.website} link in Nova's reply, or allow pop-ups for this site so voice commands can open websites.`,
+              kind: "system",
+            });
         }
         if (["SET_TIMER", "CREATE_REMINDER"].includes(result.intent)) refreshTasks();
       } catch (e) {
@@ -133,7 +141,7 @@ export function AssistantProvider({ children }: { children: ReactNode }) {
         setBusy(false);
       }
     },
-    [busy, session, synthesis, refreshTasks],
+    [busy, session, synthesis, refreshTasks, pushToast],
   );
 
   const recognition = useSpeechRecognition((finalText) => {
@@ -141,9 +149,10 @@ export function AssistantProvider({ children }: { children: ReactNode }) {
     else setDraft(finalText);
   });
 
-  // Hands-free: say "Nova …". Ignores audio while Nova is thinking or speaking.
-  const wake = useWakeWord(settings.wake_word_enabled && online && !recognition.listening, busy || synthesis.speaking, (cmd) =>
-    send(cmd, "voice"),
+  // Hands-free: say "Nova …". The mic is closed while Nova is thinking or speaking, then reopened.
+  const wake = useWakeWord(
+    settings.wake_word_enabled && online && !recognition.listening && !busy && !synthesis.speaking,
+    (cmd) => send(cmd, "voice"),
   );
 
   const toggleListening = useCallback(() => {

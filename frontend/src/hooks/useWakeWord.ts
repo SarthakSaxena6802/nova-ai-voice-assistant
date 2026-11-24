@@ -3,13 +3,16 @@ import { playChime } from "../utils/sound";
 import { ERROR_MESSAGES, getCtor } from "./useSpeechRecognition";
 
 /*
- * Hands-free mode: one continuous recognizer listens while the tab is open and only acts on
- * speech that contains "Nova". "Nova, set a timer" runs immediately; "Nova" alone waits
- * AWAKE_MS for the command. Everything else is ignored.
+ * Hands-free mode: one continuous recognizer listens while `active` and only acts on speech
+ * that contains "Nova". "Nova, set a timer" runs immediately; "Nova" alone waits AWAKE_MS for
+ * the command. The caller sets `active` to false while Nova is thinking or speaking, so the
+ * microphone is closed then (Nova can't hear itself) and a fresh session starts afterwards.
  */
 
 const AWAKE_MS = 8000;
 const WAKE = /\b(?:(?:hey|hi|ok|okay)\s+)?nova\b[\s,.!?]*/i;
+// Only these mean "the microphone can't be used at all"; every other error is retried.
+const FATAL = ["not-allowed", "service-not-allowed"];
 
 /** "hey nova, set a timer" -> { woke: true, command: "set a timer" } */
 export function splitWake(text: string): { woke: boolean; command: string } {
@@ -26,15 +29,13 @@ export interface WakeWordState {
   wakeNow: () => void;
 }
 
-export function useWakeWord(active: boolean, ignore: boolean, onCommand: (text: string) => void): WakeWordState {
+export function useWakeWord(active: boolean, onCommand: (text: string) => void): WakeWordState {
   const [state, setState] = useState<WakeState>("off");
   const [heard, setHeard] = useState("");
   const [error, setError] = useState<string | null>(null);
   const awakeUntil = useRef(0);
   const cb = useRef(onCommand);
   cb.current = onCommand;
-  const ignoreRef = useRef(ignore);
-  ignoreRef.current = ignore;
 
   const wakeNow = useCallback(() => {
     awakeUntil.current = Date.now() + AWAKE_MS;
@@ -52,6 +53,7 @@ export function useWakeWord(active: boolean, ignore: boolean, onCommand: (text: 
       return;
     }
     let stopped = false;
+    let failed = false;
     let retry: number | undefined;
     let rec: InstanceType<NonNullable<ReturnType<typeof getCtor>>> | null = null;
 
@@ -63,13 +65,17 @@ export function useWakeWord(active: boolean, ignore: boolean, onCommand: (text: 
     };
 
     const run = () => {
+      failed = false;
       rec = new Ctor();
       rec.lang = navigator.language || "en-US";
       rec.continuous = true;
       rec.interimResults = true;
+      rec.onstart = () => {
+        setError(null);
+        setState((s) => (s === "off" ? "idle" : s)); // only claim "listening" once the browser confirms it
+      };
       rec.onresult = (e) => {
         for (let i = e.resultIndex; i < e.results.length; i++) {
-          if (ignoreRef.current) continue; // Nova is talking or thinking: don't hear itself
           const r = e.results[i];
           const text = r[0].transcript.trim();
           const awake = Date.now() < awakeUntil.current;
@@ -87,20 +93,20 @@ export function useWakeWord(active: boolean, ignore: boolean, onCommand: (text: 
         }
       };
       rec.onerror = (e) => {
-        if (["not-allowed", "service-not-allowed", "audio-capture"].includes(e.error)) {
+        if (FATAL.includes(e.error)) {
           stopped = true;
           setError(ERROR_MESSAGES[e.error]);
           setState("off");
+        } else {
+          failed = true; // e.g. "audio-capture" while the speakers play, "network", "no-speech"
         }
       };
-      // Chrome ends continuous sessions after silence or ~1 min; just start a new one.
+      // Chrome ends sessions after silence, errors or ~1 min; start a new one (slower after an error).
       rec.onend = () => {
-        if (!stopped) retry = window.setTimeout(run, 300);
+        if (!stopped) retry = window.setTimeout(run, failed ? 1500 : 250);
       };
       try {
         rec.start();
-        setError(null);
-        setState((s) => (s === "off" ? "idle" : s));
       } catch {
         retry = window.setTimeout(run, 1000);
       }

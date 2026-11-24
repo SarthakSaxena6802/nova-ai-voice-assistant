@@ -83,7 +83,7 @@ export function AssistantComposer({ autoFocus = false }: { autoFocus?: boolean }
       </form>
       <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-muted">
         <span>
-          {wake.state !== "off"
+          {settings.wake_word_enabled && recognition.supported
             ? 'Say "Nova" followed by a command, or type and press Enter.'
             : recognition.supported
             ? "Click the mic and speak, or type and press Enter."

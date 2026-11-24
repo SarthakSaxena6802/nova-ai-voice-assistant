@@ -37,9 +37,9 @@ function OfflineBanner() {
   if (!checked || online) return null;
   return (
     <div className="mb-5 rounded-xl border border-bad/30 bg-bad/10 px-4 py-3 text-sm text-ink">
-      <span className="font-semibold text-bad">Backend offline.</span> Start it with{" "}
-      <code className="mono rounded bg-surface3 px-1.5 py-0.5">uvicorn app.main:app --reload</code> in the <code className="mono">backend</code>{" "}
-      folder. Nova will reconnect automatically.
+      <span className="font-semibold text-bad">Backend offline.</span> If Nova is hosted on a free server it may be waking up — wait
+      about a minute. Running locally? Start it with <code className="mono rounded bg-surface3 px-1.5 py-0.5">uvicorn app.main:app --reload</code>{" "}
+      in the <code className="mono">backend</code> folder. Nova reconnects automatically.
     </div>
   );
 }
