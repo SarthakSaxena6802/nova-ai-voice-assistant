@@ -9,9 +9,6 @@ the **AI Decision Inspector** to see exactly how the model and the rules arrived
 
 ![Nova](docs/screenshots/home.png)
 
-> **Learning the project?** Read the **Project Guide** (everything explained from zero) and the **Viva Q&A**
-> (80 questions with answers and a demo script) — as PDFs: [docs/Nova_Project_Guide.pdf](docs/Nova_Project_Guide.pdf),
-> [docs/Nova_Viva_QA.pdf](docs/Nova_Viva_QA.pdf), or as Markdown: [PROJECT_GUIDE.md](docs/PROJECT_GUIDE.md), [VIVA_QA.md](docs/VIVA_QA.md).
 
 ---
 

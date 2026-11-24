@@ -24,3 +24,8 @@ frontend/.env
 .DS_Store
 Thumbs.db
 *.tsbuildinfo
+
+# Personal study notes – kept locally, never uploaded
+docs/PROJECT_GUIDE.md
+docs/VIVA_QA.md
+docs/*.pdf
