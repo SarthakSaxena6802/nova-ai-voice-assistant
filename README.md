@@ -100,6 +100,7 @@ Training lives in [backend/app/ml/model.py](backend/app/ml/model.py) (the model)
 - **Classifier** — multinomial Logistic Regression. Gives a probability per intent (= confidence) and is
   explainable: contribution of a word = its TF-IDF value × the class coefficient.
 - **Training** — stratified 80/20 split, regularisation `C` chosen by 5-fold cross-validation, then refit on all data.
+  The trained model is committed as `backend/artifacts/intent_model.joblib`; retrain after editing the dataset.
 
 Results (held-out test split of 90 sentences):
 
@@ -165,7 +166,7 @@ Backend on [Render](https://render.com), frontend on [Vercel](https://vercel.com
 | Setting | Value |
 |---|---|
 | Root directory | `backend` |
-| Build command | `pip install -r requirements.txt && python ml/train_model.py` |
+| Build command | `pip install -r requirements.txt` (the trained model is committed, so no training on the server) |
 | Start command | `uvicorn app.main:app --host 0.0.0.0 --port $PORT` |
 | Env `PYTHON_VERSION` | `3.11.5` |
 | Env `NOVA_OPEN_BROWSER_ON_SERVER` | `false` |

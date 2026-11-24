@@ -13,9 +13,6 @@ backend/data/
 *.db-wal
 *.db-shm
 
-# Trained model artifacts (regenerate with: python ml/train_model.py)
-backend/artifacts/*.joblib
-
 # Node / frontend
 node_modules/
 frontend/dist/
