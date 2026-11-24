@@ -21,6 +21,17 @@ function Toasts() {
             <div className="min-w-0 flex-1">
               <div className="text-sm font-semibold">{t.title}</div>
               <div className="mt-0.5 text-sm text-ink2">{t.message}</div>
+              {t.link && (
+                <a
+                  href={t.link.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => dismissToast(t.id)}
+                  className="btn-primary mt-2.5 px-3 py-1.5 text-xs"
+                >
+                  {t.link.label}
+                </a>
+              )}
             </div>
             <button className="btn-ghost -mr-2 -mt-1 p-1.5" onClick={() => dismissToast(t.id)} aria-label="Dismiss notification">
               <X size={15} />

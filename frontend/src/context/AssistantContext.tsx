@@ -27,6 +27,7 @@ export interface Toast {
   title: string;
   message: string;
   kind: string;
+  link?: { url: string; label: string }; // optional button; clicking it is a real user gesture, so the tab opens
 }
 
 interface AssistantContextValue {
@@ -92,7 +93,7 @@ export function AssistantProvider({ children }: { children: ReactNode }) {
   const pushToast = useCallback((t: Omit<Toast, "id">) => {
     const id = Date.now() + Math.random();
     setToasts((prev) => [...prev.slice(-3), { ...t, id }]);
-    window.setTimeout(() => setToasts((prev) => prev.filter((x) => x.id !== id)), 9000);
+    window.setTimeout(() => setToasts((prev) => prev.filter((x) => x.id !== id)), t.link ? 20000 : 9000);
   }, []);
   const dismissToast = useCallback((id: number) => setToasts((prev) => prev.filter((x) => x.id !== id)), []);
 
@@ -127,8 +128,9 @@ export function AssistantProvider({ children }: { children: ReactNode }) {
           else
             pushToast({
               title: "Pop-up blocked",
-              message: `Click the ${result.data.website} link in Nova's reply, or allow pop-ups for this site so voice commands can open websites.`,
+              message: "Your browser blocked the new tab. Click below to open it, or allow pop-ups for this site so voice commands can open websites directly.",
               kind: "system",
+              link: { url: result.data.url as string, label: `Open ${result.data.website}` },
             });
         }
         if (["SET_TIMER", "CREATE_REMINDER"].includes(result.intent)) refreshTasks();
